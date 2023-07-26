@@ -1,6 +1,0 @@
-node_modules
-build
-test
-.env
-nodemon.json
-package-lock.json
