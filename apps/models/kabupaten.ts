@@ -3,61 +3,45 @@ import { DataTypes, Model, Optional } from "sequelize";
 import { sequelize } from ".";
 import { ZygoteAttributes, ZygoteModel } from "./zygote";
 
-export interface AdminAttributes extends ZygoteAttributes {
-	adminId: string;
-	adminName: string;
-	adminEmail: string;
-	adminPassword: string;
-	adminCreatedBy: string;
-	adminRole: "admin" | "superAdmin";
+export interface KabupatenAttributes extends ZygoteAttributes {
+	kabupatenId: string;
+	kabupatenName: string;
+	provinceId: string;
 }
 
 // we're telling the Model that 'id' is optional
 // when creating an instance of the model (such as using Model.create()).
-type AdminCreationAttributes = Optional<
-	AdminAttributes,
+type KabupatenCreationAttributes = Optional<
+	KabupatenAttributes,
 	"id" | "createdOn" | "modifiedOn"
 >;
 
 // We need to declare an interface for our model that is basically what our class would be
-interface AdminInstance
-	extends Model<AdminAttributes, AdminCreationAttributes>,
-		AdminAttributes {}
+interface KabupatenInstance
+	extends Model<KabupatenAttributes, KabupatenCreationAttributes>,
+		KabupatenAttributes {}
 
-export const AdminModel = sequelize.define<AdminInstance>(
-	"admins",
+export const KabupatenModel = sequelize.define<KabupatenInstance>(
+	"kabupaten",
 	{
 		...ZygoteModel,
-		adminId: {
+		kabupatenId: {
 			type: DataTypes.STRING(100),
 			allowNull: false,
 		},
-		adminName: {
+		kabupatenName: {
 			type: DataTypes.STRING(100),
 			allowNull: false,
 		},
-		adminEmail: {
+		provinceId: {
 			type: DataTypes.STRING(100),
 			allowNull: false,
-		},
-		adminPassword: {
-			type: DataTypes.STRING(200),
-			allowNull: false,
-		},
-		adminCreatedBy: {
-			type: DataTypes.STRING(200),
-			allowNull: true,
-		},
-		adminRole: {
-			type: DataTypes.ENUM("admin", "superAdmin"),
-			allowNull: true,
-			defaultValue: "admin",
 		},
 	},
 	{
 		...sequelize,
 		timestamps: false,
-		tableName: "admins",
+		tableName: "kabupaten",
 		deletedAt: false,
 		paranoid: true,
 		underscored: true,

@@ -2,18 +2,15 @@ import { Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { Op } from "sequelize";
-import { AdminAttributes, AdminModel } from "../../models/admins";
 import { requestChecker } from "../../utilities/requestChecker";
-import { isSuperAdmin } from "../../utilities/checkAuth";
+import { UsersAttributes, UsersModel } from "../../models/users";
 
-export const removeAdmin = async (req: any, res: Response) => {
-	const requestQuery = <AdminAttributes>req.query;
+export const removeUser = async (req: any, res: Response) => {
+	const requestQuery = <UsersAttributes>req.query;
 	const emptyField = requestChecker({
-		requireList: ["x-user-id", "adminId"],
-		requestData: { ...req.query, ...req.headers },
+		requireList: ["userId"],
+		requestData: requestQuery,
 	});
-
-	console.log(req.headers);
 
 	if (emptyField) {
 		const message = `invalid request parameter! require (${emptyField})`;
@@ -22,23 +19,31 @@ export const removeAdmin = async (req: any, res: Response) => {
 	}
 
 	try {
-		const checkCurrentAdmin = await isSuperAdmin({
-			adminId: req.header("x-user-id"),
+		const user = await UsersModel.findOne({
+			where: {
+				deleted: { [Op.eq]: 0 },
+				userId: { [Op.eq]: requestQuery.userId },
+			},
 		});
 
-		if (!checkCurrentAdmin) {
-			const message = `access denied!`;
+		if (!user) {
+			const message = `data tidak ditemukan!`;
 			const response = <ResponseDataAttributes>ResponseData.error(message);
-			return res.status(StatusCodes.UNAUTHORIZED).json(response);
+			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
 
-		const result = await AdminModel.update(
+		await UsersModel.update(
 			{ deleted: 1 },
 			{
-				where: { adminId: { [Op.eq]: requestQuery.adminId } },
+				where: {
+					userId: { [Op.eq]: requestQuery.userId },
+				},
 			}
 		);
-		return res.status(StatusCodes.OK).json(result);
+
+		const response = <ResponseDataAttributes>ResponseData.default;
+		response.data = { message: "success" };
+		return res.status(StatusCodes.OK).json(response);
 	} catch (error: any) {
 		console.log(error.message);
 		const message = `unable to process request! error ${error.message}`;

@@ -8,6 +8,15 @@ import { SessionAttributes, SessionModel } from "../../models/sessions";
 import { v4 as uuidv4 } from "uuid";
 import { requestChecker } from "../../utilities/requestChecker";
 
+interface ISessionModel {
+	adminId: string;
+	adminName: string;
+	adminEmail: string;
+	adminRole: "admin" | "superAdmin";
+	session: string;
+	sessionExpiredOn: number;
+}
+
 export const loginAdmin = async (req: any, res: Response) => {
 	const requestBody = <AdminAttributes>req.body;
 
@@ -80,16 +89,14 @@ export const loginAdmin = async (req: any, res: Response) => {
 				},
 			});
 		}
-		const responseData = <{ account: AdminAttributes; session: SessionAttributes }>{
-			account: {
-				adminId: checkAdmin?.adminId,
-				adminName: checkAdmin?.adminName,
-				adminEmail: checkAdmin?.adminEmail,
-			},
-			session: {
-				session: sessionData.session,
-				sessionExpiredOn: sessionData.sessionExpiredOn,
-			},
+
+		const responseData: ISessionModel = {
+			adminId: checkAdmin?.adminId,
+			adminName: checkAdmin?.adminName,
+			adminEmail: checkAdmin?.adminEmail,
+			adminRole: checkAdmin.adminRole,
+			session: sessionData.session,
+			sessionExpiredOn: sessionData.sessionExpiredOn,
 		};
 
 		const response = <ResponseDataAttributes>ResponseData.default;

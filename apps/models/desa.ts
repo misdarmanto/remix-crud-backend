@@ -3,61 +3,52 @@ import { DataTypes, Model, Optional } from "sequelize";
 import { sequelize } from ".";
 import { ZygoteAttributes, ZygoteModel } from "./zygote";
 
-export interface AdminAttributes extends ZygoteAttributes {
-	adminId: string;
-	adminName: string;
-	adminEmail: string;
-	adminPassword: string;
-	adminCreatedBy: string;
-	adminRole: "admin" | "superAdmin";
+export interface DesaAttributes extends ZygoteAttributes {
+	desaId: string;
+	desaName: string;
+	kecamatanId: string;
+	kabupatenId: string;
+	provinceId: string;
 }
 
 // we're telling the Model that 'id' is optional
 // when creating an instance of the model (such as using Model.create()).
-type AdminCreationAttributes = Optional<
-	AdminAttributes,
-	"id" | "createdOn" | "modifiedOn"
->;
+type DesaCreationAttributes = Optional<DesaAttributes, "id" | "createdOn" | "modifiedOn">;
 
 // We need to declare an interface for our model that is basically what our class would be
-interface AdminInstance
-	extends Model<AdminAttributes, AdminCreationAttributes>,
-		AdminAttributes {}
+interface DesaInstance
+	extends Model<DesaAttributes, DesaCreationAttributes>,
+		DesaAttributes {}
 
-export const AdminModel = sequelize.define<AdminInstance>(
-	"admins",
+export const DesaModel = sequelize.define<DesaInstance>(
+	"desa",
 	{
 		...ZygoteModel,
-		adminId: {
+		desaId: {
 			type: DataTypes.STRING(100),
 			allowNull: false,
 		},
-		adminName: {
+		desaName: {
 			type: DataTypes.STRING(100),
 			allowNull: false,
 		},
-		adminEmail: {
+		kecamatanId: {
 			type: DataTypes.STRING(100),
 			allowNull: false,
 		},
-		adminPassword: {
-			type: DataTypes.STRING(200),
+		kabupatenId: {
+			type: DataTypes.STRING(100),
 			allowNull: false,
 		},
-		adminCreatedBy: {
-			type: DataTypes.STRING(200),
-			allowNull: true,
-		},
-		adminRole: {
-			type: DataTypes.ENUM("admin", "superAdmin"),
-			allowNull: true,
-			defaultValue: "admin",
+		provinceId: {
+			type: DataTypes.STRING(100),
+			allowNull: false,
 		},
 	},
 	{
 		...sequelize,
 		timestamps: false,
-		tableName: "admins",
+		tableName: "desa",
 		deletedAt: false,
 		paranoid: true,
 		underscored: true,

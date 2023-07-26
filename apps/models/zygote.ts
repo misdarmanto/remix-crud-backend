@@ -15,7 +15,7 @@ export const ZygoteModel = {
 	},
 	modifiedOn: {
 		type: DataTypes.DATE,
-		allowNull: true,
+		defaultValue: moment().add(7, "hours").format("YYYY-MM-DD HH:mm:ss"),
 	},
 	deleted: {
 		type: DataTypes.TINYINT,

@@ -5,8 +5,8 @@ import { Op } from "sequelize";
 import { AdminAttributes, AdminModel } from "../../models/admins";
 import { CONFIG } from "../../config";
 import { requestChecker } from "../../utilities/requestChecker";
-import { checkAuth } from "../../utilities/checkAuth";
 import { v4 as uuidv4 } from "uuid";
+import { isSuperAdmin } from "../../utilities/checkAuth";
 
 export const createAdmin = async (req: any, res: Response) => {
 	const requestBody = <AdminAttributes>req.body;
@@ -23,15 +23,17 @@ export const createAdmin = async (req: any, res: Response) => {
 	}
 
 	try {
-		const admin = checkAuth({ adminId: req.header("x-user-id") });
+		const checkCurrentAdmin = await isSuperAdmin({
+			adminId: req.header("x-user-id"),
+		});
 
-		if (!admin) {
+		if (!checkCurrentAdmin) {
 			const message = `access denied!`;
 			const response = <ResponseDataAttributes>ResponseData.error(message);
 			return res.status(StatusCodes.UNAUTHORIZED).json(response);
 		}
 
-		const checkAdmin = await AdminModel.findOne({
+		const checkIsUserAlreadyExis = await AdminModel.findOne({
 			raw: true,
 			where: {
 				deleted: { [Op.eq]: 0 },
@@ -39,7 +41,7 @@ export const createAdmin = async (req: any, res: Response) => {
 			},
 		});
 
-		if (checkAdmin?.adminEmail == requestBody.adminEmail) {
+		if (checkIsUserAlreadyExis?.adminEmail) {
 			const message = `Email sudah terdatar. Silahkan gunakan email lain.`;
 			const response = <ResponseDataAttributes>ResponseData.error(message);
 			return res.status(StatusCodes.UNAUTHORIZED).json(response);
@@ -51,15 +53,12 @@ export const createAdmin = async (req: any, res: Response) => {
 			.digest("hex");
 
 		requestBody.adminId = uuidv4();
-		await AdminModel.create(<AdminAttributes>{
-			...requestBody,
-			adminPassword: hashPassword,
-			deleted: 0,
-		});
+		requestBody.adminPassword = hashPassword;
+		requestBody.adminCreatedBy = checkCurrentAdmin.adminName;
 
+		await AdminModel.create(requestBody);
 		const response = <ResponseDataAttributes>ResponseData.default;
 		response.data = { message: "success" };
-
 		return res.status(StatusCodes.OK).json(response);
 	} catch (error: any) {
 		console.log(error.message);

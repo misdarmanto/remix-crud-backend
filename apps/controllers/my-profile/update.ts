@@ -5,9 +5,8 @@ import { Op } from "sequelize";
 import { AdminAttributes, AdminModel } from "../../models/admins";
 import { CONFIG } from "../../config";
 import { requestChecker } from "../../utilities/requestChecker";
-import { isSuperAdmin } from "../../utilities/checkAuth";
 
-export const updateAdmin = async (req: any, res: Response) => {
+export const updateMyProfile = async (req: any, res: Response) => {
 	const requestBody = <AdminAttributes>req.body;
 	const emptyField = requestChecker({
 		requireList: ["x-user-id"],
@@ -21,16 +20,6 @@ export const updateAdmin = async (req: any, res: Response) => {
 	}
 
 	try {
-		const checkCurrentAdmin = await isSuperAdmin({
-			adminId: req.header("x-user-id"),
-		});
-
-		if (!checkCurrentAdmin) {
-			const message = `access denied!`;
-			const response = <ResponseDataAttributes>ResponseData.error(message);
-			return res.status(StatusCodes.UNAUTHORIZED).json(response);
-		}
-
 		if ("adminPassword" in requestBody) {
 			requestBody.adminPassword = require("crypto")
 				.createHash("sha1")
@@ -53,12 +42,10 @@ export const updateAdmin = async (req: any, res: Response) => {
 			}),
 		};
 
-		console.log(requestBody);
-
 		await AdminModel.update(newData, {
 			where: {
 				deleted: { [Op.eq]: 0 },
-				adminId: { [Op.eq]: requestBody.adminId },
+				adminId: { [Op.eq]: req.header("x-user-id") },
 			},
 		});
 
