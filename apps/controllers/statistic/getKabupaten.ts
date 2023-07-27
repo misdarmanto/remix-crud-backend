@@ -2,38 +2,14 @@ import { Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { Op } from "sequelize";
-import { KabupatenModel } from "../../models/kabupaten";
 import { UsersModel } from "../../models/users";
 
-export const statistic = async (req: any, res: Response) => {
+export const getKabupatenStatistic = async (req: any, res: Response) => {
 	try {
-		const totalKabupatenPemalang = await UsersModel.count({
-			where: {
-				deleted: { [Op.eq]: 0 },
-				userKabupaten: { [Op.eq]: "PEMALANG" },
-			},
-		});
-
-		const totalKotaPekalongan = await UsersModel.count({
-			where: {
-				deleted: { [Op.eq]: 0 },
-				userKabupaten: { [Op.eq]: "KOTA PEKALONGAN" },
-			},
-		});
-
-		const totalKabupatenPekalongan = await UsersModel.count({
-			where: {
-				deleted: { [Op.eq]: 0 },
-				userKabupaten: { [Op.eq]: "KABUPATEN PEKALONGAN" },
-			},
-		});
-
-		const totalKabupatenBatang = await UsersModel.count({
-			where: {
-				deleted: { [Op.eq]: 0 },
-				userKabupaten: { [Op.eq]: "KABUPATEN BATANG" },
-			},
-		});
+		const totalKabupatenPemalang = await getTotalKabupaten("PEMALANG");
+		const totalKotaPekalongan = await getTotalKabupaten("KOTA PEKALONGAN");
+		const totalKabupatenPekalongan = await getTotalKabupaten("KABUPATEN PEKALONGAN");
+		const totalKabupatenBatang = await getTotalKabupaten("KABUPATEN BATANG");
 
 		const response = <ResponseDataAttributes>ResponseData.default;
 
@@ -50,4 +26,14 @@ export const statistic = async (req: any, res: Response) => {
 		const response = <ResponseDataAttributes>ResponseData.error(message);
 		return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(response);
 	}
+};
+
+const getTotalKabupaten = async (name: string) => {
+	const result = await UsersModel.count({
+		where: {
+			deleted: { [Op.eq]: 0 },
+			userKabupaten: { [Op.eq]: name },
+		},
+	});
+	return result;
 };

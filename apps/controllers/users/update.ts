@@ -29,11 +29,20 @@ export const updateUser = async (req: any, res: Response) => {
 			...(requestBody.userDesa && {
 				userDesa: requestBody.userDesa,
 			}),
+			...(requestBody.userDesaId && {
+				userDesaId: requestBody.userDesaId,
+			}),
 			...(requestBody.userKecamatan && {
 				userKecamatan: requestBody.userKecamatan,
 			}),
+			...(requestBody.userKecamatanId && {
+				userKecamatanId: requestBody.userKecamatanId,
+			}),
 			...(requestBody.userKabupaten && {
 				userKabupaten: requestBody.userKabupaten,
+			}),
+			...(requestBody.userKabupatenId && {
+				userKabupatenId: requestBody.userKabupatenId,
 			}),
 			...(requestBody.userPhoneNumber && {
 				userPhoneNumber: requestBody.userPhoneNumber,

@@ -19,6 +19,19 @@ export const findAllUsers = async (req: any, res: Response) => {
 					],
 				}),
 			},
+			attributes: [
+				"userId",
+				"userName",
+				"userDetailAddress",
+				"userDesa",
+				"userDesaId",
+				"userKecamatan",
+				"userKecamatanId",
+				"userKabupaten",
+				"userKabupatenId",
+				"userPhoneNumber",
+				"createdOn",
+			],
 			order: [["id", "desc"]],
 			...(req.query.pagination == "true" && {
 				limit: page.limit,
@@ -55,6 +68,19 @@ export const findOneUser = async (req: any, res: Response) => {
 				deleted: { [Op.eq]: 0 },
 				userId: { [Op.eq]: req.params.userId },
 			},
+			attributes: [
+				"userId",
+				"userName",
+				"userDetailAddress",
+				"userDesa",
+				"userDesaId",
+				"userKecamatan",
+				"userKecamatanId",
+				"userKabupaten",
+				"userKabupatenId",
+				"userPhoneNumber",
+				"createdOn",
+			],
 		});
 
 		if (!user) {

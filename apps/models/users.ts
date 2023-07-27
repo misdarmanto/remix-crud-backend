@@ -8,8 +8,11 @@ export interface UsersAttributes extends ZygoteAttributes {
 	userName: string;
 	userDetailAddress: string;
 	userDesa: string;
+	userDesaId: string;
 	userKecamatan: string;
+	userKecamatanId: string;
 	userKabupaten: string;
+	userKabupatenId: string;
 	userPhoneNumber: string;
 }
 
@@ -45,11 +48,23 @@ export const UsersModel = sequelize.define<UsersInstance>(
 			type: DataTypes.STRING(200),
 			allowNull: false,
 		},
+		userDesaId: {
+			type: DataTypes.STRING(200),
+			allowNull: false,
+		},
 		userKecamatan: {
 			type: DataTypes.STRING(200),
 			allowNull: false,
 		},
+		userKecamatanId: {
+			type: DataTypes.STRING(200),
+			allowNull: false,
+		},
 		userKabupaten: {
+			type: DataTypes.STRING(200),
+			allowNull: false,
+		},
+		userKabupatenId: {
 			type: DataTypes.STRING(200),
 			allowNull: false,
 		},
