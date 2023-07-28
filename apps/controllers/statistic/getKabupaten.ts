@@ -3,22 +3,13 @@ import { StatusCodes } from "http-status-codes";
 import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { Op } from "sequelize";
 import { UsersModel } from "../../models/users";
+import { KabupatenModel } from "../../models/kabupaten";
 
 export const getKabupatenStatistic = async (req: any, res: Response) => {
 	try {
-		const totalKabupatenPemalang = await getTotalKabupaten("PEMALANG");
-		const totalKotaPekalongan = await getTotalKabupaten("KOTA PEKALONGAN");
-		const totalKabupatenPekalongan = await getTotalKabupaten("KABUPATEN PEKALONGAN");
-		const totalKabupatenBatang = await getTotalKabupaten("KABUPATEN BATANG");
-
+		const totalKabupaten = await getTotalKabupaten();
 		const response = <ResponseDataAttributes>ResponseData.default;
-
-		response.data = {
-			totalKotaPekalongan,
-			totalKabupatenPemalang,
-			totalKabupatenPekalongan,
-			totalKabupatenBatang,
-		};
+		response.data = totalKabupaten;
 		return res.status(StatusCodes.OK).json(response);
 	} catch (error: any) {
 		console.log(error.message);
@@ -28,12 +19,29 @@ export const getKabupatenStatistic = async (req: any, res: Response) => {
 	}
 };
 
-const getTotalKabupaten = async (name: string) => {
-	const result = await UsersModel.count({
+const getTotalKabupaten = async () => {
+	const result: any[] = [];
+
+	const kabupaten = await KabupatenModel.findAll({
 		where: {
 			deleted: { [Op.eq]: 0 },
-			userKabupaten: { [Op.eq]: name },
+			provinceId: { [Op.eq]: 1 },
 		},
 	});
+
+	for (let i = 0; kabupaten.length > i; i++) {
+		const totalUsers = await UsersModel.count({
+			where: {
+				deleted: { [Op.eq]: 0 },
+				userKabupatenId: { [Op.eq]: kabupaten[i].kabupatenId },
+			},
+		});
+
+		result.push({
+			kabupatenName: kabupaten[i].kabupatenName,
+			kabupatenId: kabupaten[i].kabupatenId,
+			totalUser: totalUsers,
+		});
+	}
 	return result;
 };
