@@ -74,5 +74,5 @@ const getDesaRegistered = async ({ kecamatanId, kabupatenId }: GetDesaTypes) => 
 		});
 	}
 
-	return result;
+	return { total: result, users: findUsers };
 };
