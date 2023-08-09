@@ -8,6 +8,8 @@ const moment_1 = __importDefault(require("moment"));
 const sequelize_1 = require("sequelize");
 const _1 = require(".");
 const zygote_1 = require("./zygote");
+const kecamatan_1 = require("./kecamatan");
+const kabupaten_1 = require("./kabupaten");
 exports.DesaModel = _1.sequelize.define("desa", {
     ...zygote_1.ZygoteModel,
     desaId: {
@@ -30,6 +32,11 @@ exports.DesaModel = _1.sequelize.define("desa", {
         type: sequelize_1.DataTypes.STRING(100),
         allowNull: false,
     },
+    isRegistered: {
+        type: sequelize_1.DataTypes.BOOLEAN,
+        allowNull: true,
+        defaultValue: 0,
+    },
 }, {
     ..._1.sequelize,
     timestamps: false,
@@ -50,4 +57,12 @@ exports.DesaModel = _1.sequelize.define("desa", {
             record.modifiedOn = now;
         },
     },
+});
+exports.DesaModel.hasOne(kecamatan_1.KecamatanModel, {
+    sourceKey: "kecamatanId",
+    foreignKey: "kecamatanId",
+});
+exports.DesaModel.hasOne(kabupaten_1.KabupatenModel, {
+    sourceKey: "kabupatenId",
+    foreignKey: "kabupatenId",
 });

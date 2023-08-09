@@ -4,6 +4,8 @@ import { v4 as uuidv4 } from "uuid";
 import { UsersAttributes, UsersModel } from "../../models/users";
 import { requestChecker } from "../../utilities/requestChecker";
 import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
+import { DesaModel } from "../../models/desa";
+import { Op } from "sequelize";
 
 export const createUser = async (req: any, res: Response) => {
 	const requestBody = <UsersAttributes>req.body;
@@ -29,6 +31,18 @@ export const createUser = async (req: any, res: Response) => {
 	}
 
 	try {
+		await DesaModel.update(
+			{
+				isRegistered: true,
+			},
+			{
+				where: {
+					deleted: { [Op.eq]: 0 },
+					desaId: { [Op.eq]: requestBody.userDesaId },
+				},
+			}
+		);
+
 		requestBody.userId = uuidv4();
 		await UsersModel.create(requestBody);
 

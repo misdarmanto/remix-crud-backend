@@ -3,12 +3,12 @@ import { StatusCodes } from "http-status-codes";
 import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { Op } from "sequelize";
 import { requestChecker } from "../../utilities/requestChecker";
-import { UsersAttributes, UsersModel } from "../../models/users";
+import { RelawanTimAttributes, RelawanTimModel } from "../../models/relawanTim";
 
-export const removeUser = async (req: any, res: Response) => {
-	const requestQuery = <UsersAttributes>req.query;
+export const removeRelawanTim = async (req: any, res: Response) => {
+	const requestQuery = <RelawanTimAttributes>req.query;
 	const emptyField = requestChecker({
-		requireList: ["userId"],
+		requireList: ["relawanTimId"],
 		requestData: requestQuery,
 	});
 
@@ -19,10 +19,10 @@ export const removeUser = async (req: any, res: Response) => {
 	}
 
 	try {
-		const user = await UsersModel.findOne({
+		const user = await RelawanTimModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				userId: { [Op.eq]: requestQuery.userId },
+				relawanTimId: { [Op.eq]: requestQuery.relawanTimId },
 			},
 		});
 
@@ -32,11 +32,11 @@ export const removeUser = async (req: any, res: Response) => {
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
 
-		await UsersModel.update(
+		await RelawanTimModel.update(
 			{ deleted: 1 },
 			{
 				where: {
-					userId: { [Op.eq]: requestQuery.userId },
+					relawanTimId: { [Op.eq]: requestQuery.relawanTimId },
 				},
 			}
 		);

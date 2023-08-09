@@ -50,6 +50,14 @@ exports.UsersModel = _1.sequelize.define("users", {
         type: sequelize_1.DataTypes.STRING(200),
         allowNull: false,
     },
+    userRelawanTimName: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: true,
+    },
+    userRelawanName: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: true,
+    },
 }, {
     ..._1.sequelize,
     timestamps: false,

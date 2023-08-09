@@ -2,6 +2,8 @@ import moment from "moment";
 import { DataTypes, Model, Optional } from "sequelize";
 import { sequelize } from ".";
 import { ZygoteAttributes, ZygoteModel } from "./zygote";
+import { KecamatanModel } from "./kecamatan";
+import { KabupatenModel } from "./kabupaten";
 
 export interface DesaAttributes extends ZygoteAttributes {
 	desaId: string;
@@ -9,6 +11,7 @@ export interface DesaAttributes extends ZygoteAttributes {
 	kecamatanId: string;
 	kabupatenId: string;
 	provinceId: string;
+	isRegistered: boolean;
 }
 
 // we're telling the Model that 'id' is optional
@@ -44,6 +47,11 @@ export const DesaModel = sequelize.define<DesaInstance>(
 			type: DataTypes.STRING(100),
 			allowNull: false,
 		},
+		isRegistered: {
+			type: DataTypes.BOOLEAN,
+			allowNull: true,
+			defaultValue: 0,
+		},
 	},
 	{
 		...sequelize,
@@ -67,3 +75,13 @@ export const DesaModel = sequelize.define<DesaInstance>(
 		},
 	}
 );
+
+DesaModel.hasOne(KecamatanModel, {
+	sourceKey: "kecamatanId",
+	foreignKey: "kecamatanId",
+});
+
+DesaModel.hasOne(KabupatenModel, {
+	sourceKey: "kabupatenId",
+	foreignKey: "kabupatenId",
+});

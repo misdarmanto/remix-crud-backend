@@ -14,6 +14,8 @@ export interface UsersAttributes extends ZygoteAttributes {
 	userKabupaten: string;
 	userKabupatenId: string;
 	userPhoneNumber: string;
+	userRelawanTimName: string;
+	userRelawanName: string;
 }
 
 // we're telling the Model that 'id' is optional
@@ -71,6 +73,14 @@ export const UsersModel = sequelize.define<UsersInstance>(
 		userPhoneNumber: {
 			type: DataTypes.STRING(200),
 			allowNull: false,
+		},
+		userRelawanTimName: {
+			type: DataTypes.STRING,
+			allowNull: true,
+		},
+		userRelawanName: {
+			type: DataTypes.STRING,
+			allowNull: true,
 		},
 	},
 	{

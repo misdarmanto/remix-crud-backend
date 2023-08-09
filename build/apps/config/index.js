@@ -7,7 +7,6 @@ exports.CONFIG = void 0;
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 exports.CONFIG = {
-    // APP CONFIGURATION
     app_version: process.env.APP_VERSION || "1.0.0",
     app_semantic: process.env.APP_SEMANTIC || "0",
     env: process.env.APP_ENV || "development",

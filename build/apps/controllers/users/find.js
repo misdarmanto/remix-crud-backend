@@ -31,6 +31,8 @@ const findAllUsers = async (req, res) => {
                 "userKabupaten",
                 "userKabupatenId",
                 "userPhoneNumber",
+                "userRelawanTimName",
+                "userRelawanName",
                 "createdOn",
             ],
             order: [["id", "desc"]],
@@ -78,6 +80,8 @@ const findOneUser = async (req, res) => {
                 "userKabupaten",
                 "userKabupatenId",
                 "userPhoneNumber",
+                "userRelawanTimName",
+                "userRelawanName",
                 "createdOn",
             ],
         });

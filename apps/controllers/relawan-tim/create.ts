@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import { requestChecker } from "../../utilities/requestChecker";
 import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { RelawanTimAttributes, RelawanTimModel } from "../../models/relawanTim";
+import { Op } from "sequelize";
 
 export const createRelawanTim = async (req: any, res: Response) => {
 	const requestBody = <RelawanTimAttributes>req.body;
@@ -19,6 +20,19 @@ export const createRelawanTim = async (req: any, res: Response) => {
 	}
 
 	try {
+		const checkRelawanTim = await RelawanTimModel.findOne({
+			where: {
+				deleted: { [Op.eq]: 0 },
+				relawanTimName: { [Op.eq]: requestBody.relawanTimName },
+			},
+		});
+
+		if (checkRelawanTim) {
+			const message = `nama sudah digunakan, gunakan nama lain`;
+			const response = <ResponseDataAttributes>ResponseData.error(message);
+			return res.status(StatusCodes.BAD_REQUEST).json(response);
+		}
+
 		requestBody.relawanTimId = uuidv4();
 		await RelawanTimModel.create(requestBody);
 

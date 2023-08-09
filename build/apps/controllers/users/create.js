@@ -6,6 +6,8 @@ const uuid_1 = require("uuid");
 const users_1 = require("../../models/users");
 const requestChecker_1 = require("../../utilities/requestChecker");
 const response_1 = require("../../utilities/response");
+const desa_1 = require("../../models/desa");
+const sequelize_1 = require("sequelize");
 const createUser = async (req, res) => {
     const requestBody = req.body;
     const emptyField = (0, requestChecker_1.requestChecker)({
@@ -28,6 +30,14 @@ const createUser = async (req, res) => {
         return res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json(response);
     }
     try {
+        await desa_1.DesaModel.update({
+            isRegistered: true,
+        }, {
+            where: {
+                deleted: { [sequelize_1.Op.eq]: 0 },
+                desaId: { [sequelize_1.Op.eq]: requestBody.userDesaId },
+            },
+        });
         requestBody.userId = (0, uuid_1.v4)();
         await users_1.UsersModel.create(requestBody);
         const response = response_1.ResponseData.default;
