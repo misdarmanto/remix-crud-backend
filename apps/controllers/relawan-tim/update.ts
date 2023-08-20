@@ -2,13 +2,14 @@ import { Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { Op } from "sequelize";
-import { UsersAttributes, UsersModel } from "../../models/users";
+import { UsersModel } from "../../models/users";
 import { requestChecker } from "../../utilities/requestChecker";
+import { RelawanTimAttributes, RelawanTimModel } from "../../models/relawanTim";
 
-export const updateUser = async (req: any, res: Response) => {
-	const requestBody = <UsersAttributes>req.body;
+export const updateRelawanTim = async (req: any, res: Response) => {
+	const requestBody = <RelawanTimAttributes>req.body;
 	const emptyField = requestChecker({
-		requireList: ["userId"],
+		requireList: ["relawanTimId"],
 		requestData: requestBody,
 	});
 
@@ -20,39 +21,15 @@ export const updateUser = async (req: any, res: Response) => {
 
 	try {
 		const newData = {
-			...(requestBody.userName && {
-				userName: requestBody.userName,
-			}),
-			...(requestBody.userDetailAddress && {
-				userDetailAddress: requestBody.userDetailAddress,
-			}),
-			...(requestBody.userDesa && {
-				userDesa: requestBody.userDesa,
-			}),
-			...(requestBody.userDesaId && {
-				userDesaId: requestBody.userDesaId,
-			}),
-			...(requestBody.userKecamatan && {
-				userKecamatan: requestBody.userKecamatan,
-			}),
-			...(requestBody.userKecamatanId && {
-				userKecamatanId: requestBody.userKecamatanId,
-			}),
-			...(requestBody.userKabupaten && {
-				userKabupaten: requestBody.userKabupaten,
-			}),
-			...(requestBody.userKabupatenId && {
-				userKabupatenId: requestBody.userKabupatenId,
-			}),
-			...(requestBody.userPhoneNumber && {
-				userPhoneNumber: requestBody.userPhoneNumber,
+			...(requestBody.relawanTimName && {
+				relawanTimName: requestBody.relawanTimName,
 			}),
 		};
 
-		await UsersModel.update(newData, {
+		await RelawanTimModel.update(newData, {
 			where: {
 				deleted: { [Op.eq]: 0 },
-				userId: { [Op.eq]: requestBody.userId },
+				relawanTimId: { [Op.eq]: requestBody.relawanTimId },
 			},
 		});
 

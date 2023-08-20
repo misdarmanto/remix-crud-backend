@@ -60,3 +60,29 @@ export const allRelawanTim = async (req: any, res: Response) => {
 		return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(response);
 	}
 };
+
+export const findOneRelawanTim = async (req: any, res: Response) => {
+	try {
+		const relawanTim = await RelawanTimModel.findOne({
+			where: {
+				deleted: { [Op.eq]: 0 },
+				relawanTimId: { [Op.eq]: req.params.id },
+			},
+		});
+
+		if (!relawanTim) {
+			const message = `relawan tim not found!`;
+			const response = <ResponseDataAttributes>ResponseData.error(message);
+			return res.status(StatusCodes.NOT_FOUND).json(response);
+		}
+
+		const response = <ResponseDataAttributes>ResponseData.default;
+		response.data = relawanTim;
+		return res.status(StatusCodes.OK).json(response);
+	} catch (error: any) {
+		console.log(error.message);
+		const message = `unable to process request! error ${error.message}`;
+		const response = <ResponseDataAttributes>ResponseData.error(message);
+		return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(response);
+	}
+};

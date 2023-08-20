@@ -1,15 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateUser = void 0;
+exports.updateRelawanTim = void 0;
 const http_status_codes_1 = require("http-status-codes");
 const response_1 = require("../../utilities/response");
 const sequelize_1 = require("sequelize");
-const users_1 = require("../../models/users");
 const requestChecker_1 = require("../../utilities/requestChecker");
-const updateUser = async (req, res) => {
+const relawanTim_1 = require("../../models/relawanTim");
+const updateRelawanTim = async (req, res) => {
     const requestBody = req.body;
     const emptyField = (0, requestChecker_1.requestChecker)({
-        requireList: ["userId"],
+        requireList: ["relawanTimId"],
         requestData: requestBody,
     });
     if (emptyField) {
@@ -19,38 +19,14 @@ const updateUser = async (req, res) => {
     }
     try {
         const newData = {
-            ...(requestBody.userName && {
-                userName: requestBody.userName,
-            }),
-            ...(requestBody.userDetailAddress && {
-                userDetailAddress: requestBody.userDetailAddress,
-            }),
-            ...(requestBody.userDesa && {
-                userDesa: requestBody.userDesa,
-            }),
-            ...(requestBody.userDesaId && {
-                userDesaId: requestBody.userDesaId,
-            }),
-            ...(requestBody.userKecamatan && {
-                userKecamatan: requestBody.userKecamatan,
-            }),
-            ...(requestBody.userKecamatanId && {
-                userKecamatanId: requestBody.userKecamatanId,
-            }),
-            ...(requestBody.userKabupaten && {
-                userKabupaten: requestBody.userKabupaten,
-            }),
-            ...(requestBody.userKabupatenId && {
-                userKabupatenId: requestBody.userKabupatenId,
-            }),
-            ...(requestBody.userPhoneNumber && {
-                userPhoneNumber: requestBody.userPhoneNumber,
+            ...(requestBody.relawanTimName && {
+                relawanTimName: requestBody.relawanTimName,
             }),
         };
-        await users_1.UsersModel.update(newData, {
+        await relawanTim_1.RelawanTimModel.update(newData, {
             where: {
                 deleted: { [sequelize_1.Op.eq]: 0 },
-                userId: { [sequelize_1.Op.eq]: requestBody.userId },
+                relawanTimId: { [sequelize_1.Op.eq]: requestBody.relawanTimId },
             },
         });
         const response = response_1.ResponseData.default;
@@ -64,4 +40,4 @@ const updateUser = async (req, res) => {
         return res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json(response);
     }
 };
-exports.updateUser = updateUser;
+exports.updateRelawanTim = updateRelawanTim;

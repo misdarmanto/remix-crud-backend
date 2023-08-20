@@ -47,6 +47,12 @@ export const updateUser = async (req: any, res: Response) => {
 			...(requestBody.userPhoneNumber && {
 				userPhoneNumber: requestBody.userPhoneNumber,
 			}),
+			...(requestBody.userRelawanName && {
+				userRelawanName: requestBody.userRelawanName,
+			}),
+			...(requestBody.userRelawanTimName && {
+				userRelawanTimName: requestBody.userRelawanTimName,
+			}),
 		};
 
 		await UsersModel.update(newData, {

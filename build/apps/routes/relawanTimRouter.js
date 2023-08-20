@@ -9,13 +9,15 @@ const middlewares_1 = require("../middlewares");
 const find_1 = require("../controllers/relawan-tim/find");
 const create_1 = require("../controllers/relawan-tim/create");
 const remove_1 = require("../controllers/relawan-tim/remove");
+const update_1 = require("../controllers/relawan-tim/update");
 const relawanTimRouter = (app) => {
     const router = express_1.default.Router();
     app.use("/relawan-tim", middlewares_1.middleware.useAuthorization, router);
     router.get("/list", (req, res) => (0, find_1.findAllRelawanTim)(req, res));
     router.get("/all", (req, res) => (0, find_1.allRelawanTim)(req, res));
+    router.get("/detail/:id", (req, res) => (0, find_1.findOneRelawanTim)(req, res));
     router.post("/", (req, res) => (0, create_1.createRelawanTim)(req, res));
-    // router.patch("/", (req: Request, res: Response) => updateUser(req, res));
+    router.patch("/", (req, res) => (0, update_1.updateRelawanTim)(req, res));
     router.delete("/", (req, res) => (0, remove_1.removeRelawanTim)(req, res));
 };
 exports.relawanTimRouter = relawanTimRouter;

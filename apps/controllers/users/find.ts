@@ -16,6 +16,11 @@ export const findAllUsers = async (req: any, res: Response) => {
 					[Op.or]: [
 						{ userName: { [Op.like]: `%${req.query.search}%` } },
 						{ userPhoneNumber: { [Op.like]: `%${req.query.search}%` } },
+						{ userDesa: { [Op.like]: `%${req.query.search}%` } },
+						{ userKecamatan: { [Op.like]: `%${req.query.search}%` } },
+						{ userKabupaten: { [Op.like]: `%${req.query.search}%` } },
+						{ userRelawanName: { [Op.like]: `%${req.query.search}%` } },
+						{ userRelawanTimName: { [Op.like]: `%${req.query.search}%` } },
 					],
 				}),
 			},

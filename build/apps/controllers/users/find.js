@@ -17,6 +17,11 @@ const findAllUsers = async (req, res) => {
                     [sequelize_1.Op.or]: [
                         { userName: { [sequelize_1.Op.like]: `%${req.query.search}%` } },
                         { userPhoneNumber: { [sequelize_1.Op.like]: `%${req.query.search}%` } },
+                        { userDesa: { [sequelize_1.Op.like]: `%${req.query.search}%` } },
+                        { userKecamatan: { [sequelize_1.Op.like]: `%${req.query.search}%` } },
+                        { userKabupaten: { [sequelize_1.Op.like]: `%${req.query.search}%` } },
+                        { userRelawanName: { [sequelize_1.Op.like]: `%${req.query.search}%` } },
+                        { userRelawanTimName: { [sequelize_1.Op.like]: `%${req.query.search}%` } },
                     ],
                 }),
             },
