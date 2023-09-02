@@ -12,11 +12,11 @@ const findWaBlasSettings = async (req, res) => {
                 deleted: { [sequelize_1.Op.eq]: 0 },
             },
         });
-        if (!waBlasSettings) {
-            const message = `wa blas settings not found!`;
-            const response = response_1.ResponseData.error(message);
-            return res.status(http_status_codes_1.StatusCodes.NOT_FOUND).json(response);
-        }
+        // if (!waBlasSettings) {
+        // 	const message = `wa blas settings not found!`;
+        // 	const response = <ResponseDataAttributes>ResponseData.error(message);
+        // 	return res.status(StatusCodes.NOT_FOUND).json(response);
+        // }
         const response = response_1.ResponseData.default;
         response.data = waBlasSettings;
         return res.status(http_status_codes_1.StatusCodes.OK).json(response);

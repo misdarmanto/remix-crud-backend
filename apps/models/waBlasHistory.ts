@@ -23,7 +23,7 @@ interface WaBlasHistoryInstance
 	extends Model<WaBlasHistoryAttributes, WaBlasHistoryCreationAttributes>,
 		WaBlasHistoryAttributes {}
 
-export const WaBlasSettingsModel = sequelize.define<WaBlasHistoryInstance>(
+export const WaBlasHistoryModel = sequelize.define<WaBlasHistoryInstance>(
 	"wa_blas_history",
 	{
 		...ZygoteModel,

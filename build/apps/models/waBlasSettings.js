@@ -14,7 +14,7 @@ exports.WaBlasSettingsModel = _1.sequelize.define("wa_blas_settings", {
         type: sequelize_1.DataTypes.STRING(100),
         allowNull: false,
     },
-    waBlasSettingsMessege: {
+    waBlasSettingsMessage: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
     },

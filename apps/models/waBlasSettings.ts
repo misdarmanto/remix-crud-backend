@@ -5,7 +5,7 @@ import { ZygoteAttributes, ZygoteModel } from "./zygote";
 
 export interface WaBlasSettingsAttributes extends ZygoteAttributes {
 	waBlasSettingsId: string;
-	waBlasSettingsMessege: string;
+	waBlasSettingsMessage: string;
 }
 
 // we're telling the Model that 'id' is optional
@@ -28,7 +28,7 @@ export const WaBlasSettingsModel = sequelize.define<ProvinceInstance>(
 			type: DataTypes.STRING(100),
 			allowNull: false,
 		},
-		waBlasSettingsMessege: {
+		waBlasSettingsMessage: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},

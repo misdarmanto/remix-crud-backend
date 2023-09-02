@@ -3,12 +3,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.WaBlasSettingsModel = void 0;
+exports.WaBlasHistoryModel = void 0;
 const moment_1 = __importDefault(require("moment"));
 const sequelize_1 = require("sequelize");
 const _1 = require(".");
 const zygote_1 = require("./zygote");
-exports.WaBlasSettingsModel = _1.sequelize.define("wa_blas_history", {
+exports.WaBlasHistoryModel = _1.sequelize.define("wa_blas_history", {
     ...zygote_1.ZygoteModel,
     waBlasHistoryId: {
         type: sequelize_1.DataTypes.STRING(100),

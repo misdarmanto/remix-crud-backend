@@ -30,7 +30,7 @@ export const waBlasSendMessage = async (req: any, res: Response) => {
 		for (let user of users) {
 			await handleSendWhatsAppMessage({
 				whatsAppNumber: user.userPhoneNumber,
-				message: waBlasSettings.waBlasSettingsMessege,
+				message: waBlasSettings.waBlasSettingsMessage,
 			});
 		}
 

@@ -12,7 +12,7 @@ import {
 export const createOrUpdateWaBlassSettings = async (req: any, res: Response) => {
 	const requestBody = <WaBlasSettingsAttributes>req.body;
 	const emptyField = requestChecker({
-		requireList: ["waBlassSettingsMessage"],
+		requireList: ["waBlasSettingsMessage"],
 		requestData: requestBody,
 	});
 
@@ -30,8 +30,8 @@ export const createOrUpdateWaBlassSettings = async (req: any, res: Response) => 
 		});
 
 		if (checkWaBlassSettings) {
-			checkWaBlassSettings.waBlasSettingsMessege =
-				requestBody.waBlasSettingsMessege;
+			checkWaBlassSettings.waBlasSettingsMessage =
+				requestBody.waBlasSettingsMessage;
 			checkWaBlassSettings.save();
 		} else {
 			requestBody.waBlasSettingsId = uuidv4();

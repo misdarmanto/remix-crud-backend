@@ -4,12 +4,16 @@ import { findWaBlasSettings } from "../controllers/waBlass/findWaBlasSettings";
 import { createOrUpdateWaBlassSettings } from "../controllers/waBlass/createOrUpdateWaBlasSettings";
 import { waBlasSendMessage } from "../controllers/waBlass/sendMessage";
 import { waBlasSendMessageTest } from "../controllers/waBlass/sendMessageTest";
+import { waBlasHistoryFindAll } from "../controllers/waBlass/history";
 
 export const waBlasRouter = (app: Express) => {
 	const router = express.Router();
 	app.use("/wa-blas", middleware.useAuthorization, router);
 	router.post("/send-message", (req: Request, res: Response) =>
 		waBlasSendMessage(req, res)
+	);
+	router.get("/history", (req: Request, res: Response) =>
+		waBlasHistoryFindAll(req, res)
 	);
 	router.get("/settings", (req: Request, res: Response) =>
 		findWaBlasSettings(req, res)

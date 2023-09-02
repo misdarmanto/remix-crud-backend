@@ -10,7 +10,7 @@ const waBlasSettings_1 = require("../../models/waBlasSettings");
 const createOrUpdateWaBlassSettings = async (req, res) => {
     const requestBody = req.body;
     const emptyField = (0, requestChecker_1.requestChecker)({
-        requireList: ["waBlassSettingsMessage"],
+        requireList: ["waBlasSettingsMessage"],
         requestData: requestBody,
     });
     if (emptyField) {
@@ -25,8 +25,8 @@ const createOrUpdateWaBlassSettings = async (req, res) => {
             },
         });
         if (checkWaBlassSettings) {
-            checkWaBlassSettings.waBlasSettingsMessege =
-                requestBody.waBlasSettingsMessege;
+            checkWaBlassSettings.waBlasSettingsMessage =
+                requestBody.waBlasSettingsMessage;
             checkWaBlassSettings.save();
         }
         else {
