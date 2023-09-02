@@ -15,5 +15,6 @@ export const CONFIG = {
 		username: process.env.AUTHORIZATION_USERNAME || "d4p1l",
 		passsword: process.env.AUTHORIZATION_PASSWORD || "d4p1l2023",
 	},
+	waBlasToken: process.env.WA_BLAS_TOKEN,
 	base_url: process.env.BASE_URL || `http://localhost:${process.env.APP_PORT}`,
 };

@@ -6,6 +6,7 @@ import { statisticRouter } from "./statisticRouter";
 import { regionRouter } from "./regionRouter";
 import { myProfileRouter } from "./myProfileRouter";
 import { relawanTimRouter } from "./relawanTimRouter";
+import { waBlasRouter } from "./waBlasRouter";
 
 export const route = (app: Express) => {
 	app.get("/", (req: Request, res: Response) => index(req, res));
@@ -15,4 +16,5 @@ export const route = (app: Express) => {
 	relawanTimRouter(app);
 	regionRouter(app);
 	myProfileRouter(app);
+	waBlasRouter(app);
 };

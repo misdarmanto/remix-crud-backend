@@ -8,6 +8,7 @@ const statisticRouter_1 = require("./statisticRouter");
 const regionRouter_1 = require("./regionRouter");
 const myProfileRouter_1 = require("./myProfileRouter");
 const relawanTimRouter_1 = require("./relawanTimRouter");
+const waBlasRouter_1 = require("./waBlasRouter");
 const route = (app) => {
     app.get("/", (req, res) => (0, controllers_1.index)(req, res));
     (0, adminRouter_1.adminRouter)(app);
@@ -16,5 +17,6 @@ const route = (app) => {
     (0, relawanTimRouter_1.relawanTimRouter)(app);
     (0, regionRouter_1.regionRouter)(app);
     (0, myProfileRouter_1.myProfileRouter)(app);
+    (0, waBlasRouter_1.waBlasRouter)(app);
 };
 exports.route = route;
