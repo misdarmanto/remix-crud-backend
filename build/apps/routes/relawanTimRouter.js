@@ -15,6 +15,7 @@ const relawanTimRouter = (app) => {
     app.use("/relawan-tim", middlewares_1.middleware.useAuthorization, router);
     router.get("/list", (req, res) => (0, find_1.findAllRelawanTim)(req, res));
     router.get("/all", (req, res) => (0, find_1.allRelawanTim)(req, res));
+    router.get("/members/:relawanTimName", (req, res) => (0, find_1.findAllRelawanMember)(req, res));
     router.get("/detail/:id", (req, res) => (0, find_1.findOneRelawanTim)(req, res));
     router.post("/", (req, res) => (0, create_1.createRelawanTim)(req, res));
     router.patch("/", (req, res) => (0, update_1.updateRelawanTim)(req, res));
