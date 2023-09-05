@@ -12,12 +12,6 @@ export const findWaBlasSettings = async (req: any, res: Response) => {
 			},
 		});
 
-		// if (!waBlasSettings) {
-		// 	const message = `wa blas settings not found!`;
-		// 	const response = <ResponseDataAttributes>ResponseData.error(message);
-		// 	return res.status(StatusCodes.NOT_FOUND).json(response);
-		// }
-
 		const response = <ResponseDataAttributes>ResponseData.default;
 		response.data = waBlasSettings;
 		return res.status(StatusCodes.OK).json(response);

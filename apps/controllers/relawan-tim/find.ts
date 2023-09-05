@@ -4,6 +4,7 @@ import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { Op } from "sequelize";
 import { Pagination } from "../../utilities/pagination";
 import { RelawanTimModel } from "../../models/relawanTim";
+import { UsersModel } from "../../models/users";
 
 export const findAllRelawanTim = async (req: any, res: Response) => {
 	try {
@@ -90,10 +91,10 @@ export const findOneRelawanTim = async (req: any, res: Response) => {
 export const findAllRelawanMember = async (req: any, res: Response) => {
 	try {
 		const page = new Pagination(+req.query.page || 0, +req.query.size || 10);
-		const result = await RelawanTimModel.findAndCountAll({
+		const result = await UsersModel.findAndCountAll({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				relawanTimName: { [Op.eq]: req.params.relawanTimName },
+				userRelawanTimName: { [Op.eq]: req.params.relawanTimName },
 			},
 			order: [["id", "desc"]],
 			...(req.query.pagination == "true" && {

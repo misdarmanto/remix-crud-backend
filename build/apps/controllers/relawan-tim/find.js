@@ -6,6 +6,7 @@ const response_1 = require("../../utilities/response");
 const sequelize_1 = require("sequelize");
 const pagination_1 = require("../../utilities/pagination");
 const relawanTim_1 = require("../../models/relawanTim");
+const users_1 = require("../../models/users");
 const findAllRelawanTim = async (req, res) => {
     try {
         const page = new pagination_1.Pagination(+req.query.page || 0, +req.query.size || 10);
@@ -89,10 +90,10 @@ exports.findOneRelawanTim = findOneRelawanTim;
 const findAllRelawanMember = async (req, res) => {
     try {
         const page = new pagination_1.Pagination(+req.query.page || 0, +req.query.size || 10);
-        const result = await relawanTim_1.RelawanTimModel.findAndCountAll({
+        const result = await users_1.UsersModel.findAndCountAll({
             where: {
                 deleted: { [sequelize_1.Op.eq]: 0 },
-                relawanTimName: { [sequelize_1.Op.eq]: req.params.relawanTimName },
+                userRelawanTimName: { [sequelize_1.Op.eq]: req.params.relawanTimName },
             },
             order: [["id", "desc"]],
             ...(req.query.pagination == "true" && {
