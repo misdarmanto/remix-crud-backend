@@ -12,24 +12,42 @@ const users_1 = require("../../models/users");
 const waBlasHistory_1 = require("../../models/waBlasHistory");
 const uuid_1 = require("uuid");
 const axios_1 = __importDefault(require("axios"));
+const waBlasSettings_1 = require("../../models/waBlasSettings");
 const waBlasSendMessage = async (req, res) => {
+    console.log(req.body);
     try {
         const users = await users_1.UsersModel.findAll({
             where: {
                 deleted: { [sequelize_1.Op.eq]: 0 },
+                ...(req.body.kabupatenNameSelected && {
+                    userKabupaten: { [sequelize_1.Op.eq]: req.body.kabupatenNameSelected },
+                }),
+                ...(req.body.kecamaanNameSelected && {
+                    userKecamatan: { [sequelize_1.Op.eq]: req.body.kecamaanNameSelected },
+                }),
             },
         });
+        const waBlasSettings = await waBlasSettings_1.WaBlasSettingsModel.findOne({
+            where: {
+                deleted: { [sequelize_1.Op.eq]: 0 },
+            },
+        });
+        if (!waBlasSettings) {
+            const message = `pengaturan pesan default tidak ditemukan. mohon buat pengaturan pesan default terlebih dahulu!`;
+            const response = response_1.ResponseData.error(message);
+            return res.status(http_status_codes_1.StatusCodes.NOT_FOUND).json(response);
+        }
         for (let user of users) {
             await handleSendWhatsAppMessage({
                 whatsAppNumber: user.userPhoneNumber,
-                message: req.body.whatsAppMessage,
+                message: waBlasSettings?.waBlasSettingsMessage,
             });
             const payload = {
                 waBlasHistoryId: (0, uuid_1.v4)(),
                 waBlasHistoryUserId: user.userId,
                 waBlasHistoryUserPhone: user.userPhoneNumber,
                 waBlasHistoryUserName: user.userName,
-                waBlasHistoryMessage: req.body.whatsAppMessage,
+                waBlasHistoryMessage: waBlasSettings.waBlasSettingsMessage,
             };
             await waBlasHistory_1.WaBlasHistoryModel.create(payload);
         }
@@ -49,8 +67,6 @@ const handleSendWhatsAppMessage = async ({ message, whatsAppNumber, }) => {
     const baseUrlPath = "https://pati.wablas.com/api/send-message?phone=";
     const apiUrl = `${baseUrlPath}${whatsAppNumber}&message=${message}&token=${config_1.CONFIG.waBlasToken}`;
     try {
-        console.log(whatsAppNumber);
-        console.log(message);
         await axios_1.default.get(apiUrl);
     }
     catch (error) {

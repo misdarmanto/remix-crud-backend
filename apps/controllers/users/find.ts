@@ -7,7 +7,6 @@ import { requestChecker } from "../../utilities/requestChecker";
 import { UsersModel } from "../../models/users";
 
 export const findAllUsers = async (req: any, res: Response) => {
-	console.log(req.query);
 	try {
 		const page = new Pagination(+req.query.page || 0, +req.query.size || 10);
 		const result = await UsersModel.findAndCountAll({
@@ -53,7 +52,6 @@ export const findAllUsers = async (req: any, res: Response) => {
 			}),
 		});
 
-		console.log(result.rows.length);
 		const response = <ResponseDataAttributes>ResponseData.default;
 		response.data = page.data(result);
 		return res.status(StatusCodes.OK).json(response);
