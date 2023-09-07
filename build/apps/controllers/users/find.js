@@ -8,6 +8,7 @@ const pagination_1 = require("../../utilities/pagination");
 const requestChecker_1 = require("../../utilities/requestChecker");
 const users_1 = require("../../models/users");
 const findAllUsers = async (req, res) => {
+    console.log(req.query);
     try {
         const page = new pagination_1.Pagination(+req.query.page || 0, +req.query.size || 10);
         const result = await users_1.UsersModel.findAndCountAll({
@@ -23,6 +24,12 @@ const findAllUsers = async (req, res) => {
                         { userRelawanName: { [sequelize_1.Op.like]: `%${req.query.search}%` } },
                         { userRelawanTimName: { [sequelize_1.Op.like]: `%${req.query.search}%` } },
                     ],
+                }),
+                ...(req.query.userKabupaten && {
+                    userKabupaten: { [sequelize_1.Op.eq]: req.query.userKabupaten },
+                }),
+                ...(req.query.userKecamatan && {
+                    userKecamatan: { [sequelize_1.Op.eq]: req.query.userKecamatan },
                 }),
             },
             attributes: [
@@ -46,6 +53,7 @@ const findAllUsers = async (req, res) => {
                 offset: page.offset,
             }),
         });
+        console.log(result.rows.length);
         const response = response_1.ResponseData.default;
         response.data = page.data(result);
         return res.status(http_status_codes_1.StatusCodes.OK).json(response);
