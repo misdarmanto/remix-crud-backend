@@ -1,1 +1,4 @@
-1. collumn relawan name and relwan id in user table
+1. Tambah data collumn :
+    userReferralId: string
+    userReferralPosition: 'korwil' | 'korcam' | 'kordes' | 'kortps' | 'pemilih'
+    userPosition: 'korwil' | 'korcam' | 'kordes' | 'kortps' | 'pemilih'

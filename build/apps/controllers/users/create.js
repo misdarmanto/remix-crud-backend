@@ -12,17 +12,18 @@ const createUser = async (req, res) => {
     const requestBody = req.body;
     const emptyField = (0, requestChecker_1.requestChecker)({
         requireList: [
-            "userName",
-            "userDetailAddress",
-            "userDesa",
-            "userDesaId",
-            "userKecamatan",
-            "userKecamatanId",
-            "userKabupaten",
-            "userKabupatenId",
-            "userPhoneNumber",
+            'userName',
+            'userDetailAddress',
+            'userDesa',
+            'userDesaId',
+            'userKecamatan',
+            'userKecamatanId',
+            'userKabupaten',
+            'userKabupatenId',
+            'userPhoneNumber',
+            'userPosition'
         ],
-        requestData: requestBody,
+        requestData: requestBody
     });
     if (emptyField) {
         const message = `mohon lengkapi data berikut(${emptyField})`;
@@ -31,17 +32,17 @@ const createUser = async (req, res) => {
     }
     try {
         await desa_1.DesaModel.update({
-            isRegistered: true,
+            isRegistered: true
         }, {
             where: {
                 deleted: { [sequelize_1.Op.eq]: 0 },
-                desaId: { [sequelize_1.Op.eq]: requestBody.userDesaId },
-            },
+                desaId: { [sequelize_1.Op.eq]: requestBody.userDesaId }
+            }
         });
         requestBody.userId = (0, uuid_1.v4)();
         await users_1.UsersModel.create(requestBody);
         const response = response_1.ResponseData.default;
-        response.data = { message: "success" };
+        response.data = { message: 'success' };
         return res.status(http_status_codes_1.StatusCodes.CREATED).json(response);
     }
     catch (error) {
