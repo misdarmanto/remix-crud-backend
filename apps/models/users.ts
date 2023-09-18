@@ -16,8 +16,8 @@ export interface UsersAttributes extends ZygoteAttributes {
   userPhoneNumber: string
   userRelawanTimName: string
   userRelawanName: string
-  userReferralId: string
-  userReferralPosition: 'korwil' | 'korcam' | 'kordes' | 'kortps' | 'pemilih'
+  userReferrerId: string
+  userReferrerPosition: 'korwil' | 'korcam' | 'kordes' | 'kortps' | 'pemilih'
   userPosition: 'korwil' | 'korcam' | 'kordes' | 'kortps' | 'pemilih'
 }
 
@@ -85,11 +85,11 @@ export const UsersModel = sequelize.define<UsersInstance>(
       type: DataTypes.STRING,
       allowNull: true
     },
-    userReferralId: {
+    userReferrerId: {
       type: DataTypes.STRING,
       allowNull: true
     },
-    userReferralPosition: {
+    userReferrerPosition: {
       type: DataTypes.ENUM('korwil', 'korcam', 'kordes', 'kortps', 'pemilih'),
       allowNull: true
     },

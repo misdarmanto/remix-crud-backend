@@ -21,36 +21,21 @@ const findAllUsers = async (req, res) => {
                         { userKecamatan: { [sequelize_1.Op.like]: `%${req.query.search}%` } },
                         { userKabupaten: { [sequelize_1.Op.like]: `%${req.query.search}%` } },
                         { userRelawanName: { [sequelize_1.Op.like]: `%${req.query.search}%` } },
-                        { userRelawanTimName: { [sequelize_1.Op.like]: `%${req.query.search}%` } },
-                    ],
+                        { userRelawanTimName: { [sequelize_1.Op.like]: `%${req.query.search}%` } }
+                    ]
                 }),
                 ...(req.query.userKabupaten && {
-                    userKabupaten: { [sequelize_1.Op.eq]: req.query.userKabupaten },
+                    userKabupaten: { [sequelize_1.Op.eq]: req.query.userKabupaten }
                 }),
                 ...(req.query.userKecamatan && {
-                    userKecamatan: { [sequelize_1.Op.eq]: req.query.userKecamatan },
-                }),
+                    userKecamatan: { [sequelize_1.Op.eq]: req.query.userKecamatan }
+                })
             },
-            attributes: [
-                "userId",
-                "userName",
-                "userDetailAddress",
-                "userDesa",
-                "userDesaId",
-                "userKecamatan",
-                "userKecamatanId",
-                "userKabupaten",
-                "userKabupatenId",
-                "userPhoneNumber",
-                "userRelawanTimName",
-                "userRelawanName",
-                "createdOn",
-            ],
-            order: [["id", "desc"]],
-            ...(req.query.pagination == "true" && {
+            order: [['id', 'desc']],
+            ...(req.query.pagination == 'true' && {
                 limit: page.limit,
-                offset: page.offset,
-            }),
+                offset: page.offset
+            })
         });
         const response = response_1.ResponseData.default;
         response.data = page.data(result);
@@ -66,8 +51,8 @@ const findAllUsers = async (req, res) => {
 exports.findAllUsers = findAllUsers;
 const findOneUser = async (req, res) => {
     const emptyField = (0, requestChecker_1.requestChecker)({
-        requireList: ["userId"],
-        requestData: req.params,
+        requireList: ['userId'],
+        requestData: req.params
     });
     if (emptyField) {
         const message = `invalid request parameter! require (${emptyField})`;
@@ -78,23 +63,8 @@ const findOneUser = async (req, res) => {
         const user = await users_1.UsersModel.findOne({
             where: {
                 deleted: { [sequelize_1.Op.eq]: 0 },
-                userId: { [sequelize_1.Op.eq]: req.params.userId },
-            },
-            attributes: [
-                "userId",
-                "userName",
-                "userDetailAddress",
-                "userDesa",
-                "userDesaId",
-                "userKecamatan",
-                "userKecamatanId",
-                "userKabupaten",
-                "userKabupatenId",
-                "userPhoneNumber",
-                "userRelawanTimName",
-                "userRelawanName",
-                "createdOn",
-            ],
+                userId: { [sequelize_1.Op.eq]: req.params.userId }
+            }
         });
         if (!user) {
             const message = `user not found!`;

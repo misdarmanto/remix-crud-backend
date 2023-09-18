@@ -58,11 +58,11 @@ exports.UsersModel = _1.sequelize.define('users', {
         type: sequelize_1.DataTypes.STRING,
         allowNull: true
     },
-    userReferralId: {
+    userReferrerId: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: true
     },
-    userReferralPosition: {
+    userReferrerPosition: {
         type: sequelize_1.DataTypes.ENUM('korwil', 'korcam', 'kordes', 'kortps', 'pemilih'),
         allowNull: true
     },
