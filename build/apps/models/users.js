@@ -62,6 +62,10 @@ exports.UsersModel = _1.sequelize.define('users', {
         type: sequelize_1.DataTypes.STRING,
         allowNull: true
     },
+    userReferrerName: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: true
+    },
     userReferrerPosition: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: true

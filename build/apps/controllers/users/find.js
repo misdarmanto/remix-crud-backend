@@ -14,8 +14,8 @@ const findAllUsers = async (req, res) => {
         const result = await users_1.UsersModel.findAndCountAll({
             where: {
                 deleted: { [sequelize_1.Op.eq]: 0 },
-                ...(req.query.userPosition && {
-                    userPosition: { [sequelize_1.Op.eq]: `${req.query.userPosition}` }
+                ...(req.query.searchUserReferrer && {
+                    userPosition: { [sequelize_1.Op.eq]: `${req.query.searchUserReferrer}` }
                 }),
                 ...(req.query.search && {
                     [sequelize_1.Op.or]: [

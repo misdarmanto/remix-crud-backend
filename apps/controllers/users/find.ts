@@ -13,8 +13,8 @@ export const findAllUsers = async (req: any, res: Response) => {
     const result = await UsersModel.findAndCountAll({
       where: {
         deleted: { [Op.eq]: 0 },
-        ...(req.query.userPosition && {
-          userPosition: { [Op.eq]: `${req.query.userPosition}` }
+        ...(req.query.searchUserReferrer && {
+          userPosition: { [Op.eq]: `${req.query.searchUserReferrer}` }
         }),
         ...(req.query.search && {
           [Op.or]: [
