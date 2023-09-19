@@ -7,11 +7,15 @@ import { requestChecker } from '../../utilities/requestChecker'
 import { UsersModel } from '../../models/users'
 
 export const findAllUsers = async (req: any, res: Response) => {
+  console.log(req.query)
   try {
     const page = new Pagination(+req.query.page || 0, +req.query.size || 10)
     const result = await UsersModel.findAndCountAll({
       where: {
         deleted: { [Op.eq]: 0 },
+        ...(req.query.userPosition && {
+          userPosition: { [Op.eq]: `${req.query.userPosition}` }
+        }),
         ...(req.query.search && {
           [Op.or]: [
             { userName: { [Op.like]: `%${req.query.search}%` } },
@@ -19,8 +23,8 @@ export const findAllUsers = async (req: any, res: Response) => {
             { userDesa: { [Op.like]: `%${req.query.search}%` } },
             { userKecamatan: { [Op.like]: `%${req.query.search}%` } },
             { userKabupaten: { [Op.like]: `%${req.query.search}%` } },
-            { userRelawanName: { [Op.like]: `%${req.query.search}%` } },
-            { userRelawanTimName: { [Op.like]: `%${req.query.search}%` } }
+            { userPosition: { [Op.like]: `%${req.query.search}%` } },
+            { userReferrerPosition: { [Op.like]: `%${req.query.search}%` } }
           ]
         }),
         ...(req.query.userKabupaten && {

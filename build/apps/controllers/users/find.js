@@ -8,11 +8,15 @@ const pagination_1 = require("../../utilities/pagination");
 const requestChecker_1 = require("../../utilities/requestChecker");
 const users_1 = require("../../models/users");
 const findAllUsers = async (req, res) => {
+    console.log(req.query);
     try {
         const page = new pagination_1.Pagination(+req.query.page || 0, +req.query.size || 10);
         const result = await users_1.UsersModel.findAndCountAll({
             where: {
                 deleted: { [sequelize_1.Op.eq]: 0 },
+                ...(req.query.userPosition && {
+                    userPosition: { [sequelize_1.Op.eq]: `${req.query.userPosition}` }
+                }),
                 ...(req.query.search && {
                     [sequelize_1.Op.or]: [
                         { userName: { [sequelize_1.Op.like]: `%${req.query.search}%` } },
@@ -20,8 +24,8 @@ const findAllUsers = async (req, res) => {
                         { userDesa: { [sequelize_1.Op.like]: `%${req.query.search}%` } },
                         { userKecamatan: { [sequelize_1.Op.like]: `%${req.query.search}%` } },
                         { userKabupaten: { [sequelize_1.Op.like]: `%${req.query.search}%` } },
-                        { userRelawanName: { [sequelize_1.Op.like]: `%${req.query.search}%` } },
-                        { userRelawanTimName: { [sequelize_1.Op.like]: `%${req.query.search}%` } }
+                        { userPosition: { [sequelize_1.Op.like]: `%${req.query.search}%` } },
+                        { userReferrerPosition: { [sequelize_1.Op.like]: `%${req.query.search}%` } }
                     ]
                 }),
                 ...(req.query.userKabupaten && {
