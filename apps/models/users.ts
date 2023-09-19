@@ -90,7 +90,7 @@ export const UsersModel = sequelize.define<UsersInstance>(
       allowNull: true
     },
     userReferrerPosition: {
-      type: DataTypes.ENUM('korwil', 'korcam', 'kordes', 'kortps', 'pemilih'),
+      type: DataTypes.STRING,
       allowNull: true
     },
     userPosition: {
