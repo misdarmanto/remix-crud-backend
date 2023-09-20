@@ -23,8 +23,8 @@ const findAllUsers = async (req, res) => {
                         { userDesa: { [sequelize_1.Op.like]: `%${req.query.search}%` } },
                         { userKecamatan: { [sequelize_1.Op.like]: `%${req.query.search}%` } },
                         { userKabupaten: { [sequelize_1.Op.like]: `%${req.query.search}%` } },
-                        { userPosition: { [sequelize_1.Op.like]: `%${req.query.search}%` } },
-                        { userReferrerPosition: { [sequelize_1.Op.like]: `%${req.query.search}%` } }
+                        { userPosition: { [sequelize_1.Op.like]: `%${req.query.search}%` } }
+                        // { userReferrerPosition: { [Op.like]: `%${req.query.search}%` } }
                     ]
                 }),
                 ...(req.query.userKabupaten && {

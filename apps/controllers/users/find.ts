@@ -22,8 +22,8 @@ export const findAllUsers = async (req: any, res: Response) => {
             { userDesa: { [Op.like]: `%${req.query.search}%` } },
             { userKecamatan: { [Op.like]: `%${req.query.search}%` } },
             { userKabupaten: { [Op.like]: `%${req.query.search}%` } },
-            { userPosition: { [Op.like]: `%${req.query.search}%` } },
-            { userReferrerPosition: { [Op.like]: `%${req.query.search}%` } }
+            { userPosition: { [Op.like]: `%${req.query.search}%` } }
+            // { userReferrerPosition: { [Op.like]: `%${req.query.search}%` } }
           ]
         }),
         ...(req.query.userKabupaten && {
