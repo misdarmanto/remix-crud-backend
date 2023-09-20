@@ -1,20 +1,30 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.findOneUser = exports.findAllUsers = void 0;
+exports.findOneUser = exports.findUserReferral = void 0;
 const http_status_codes_1 = require("http-status-codes");
 const response_1 = require("../../utilities/response");
 const sequelize_1 = require("sequelize");
 const pagination_1 = require("../../utilities/pagination");
 const requestChecker_1 = require("../../utilities/requestChecker");
 const users_1 = require("../../models/users");
-const findAllUsers = async (req, res) => {
+const findUserReferral = async (req, res) => {
+    console.log(req.query);
     try {
         const page = new pagination_1.Pagination(+req.query.page || 0, +req.query.size || 10);
         const result = await users_1.UsersModel.findAndCountAll({
             where: {
                 deleted: { [sequelize_1.Op.eq]: 0 },
-                ...(req.query.searchUserReferrer && {
-                    userPosition: { [sequelize_1.Op.eq]: `${req.query.searchUserReferrer}` }
+                ...(req.query.userPosition && {
+                    userPosition: { [sequelize_1.Op.eq]: `${req.query.userPosition}` }
+                }),
+                ...(req.query.userReferrerId && {
+                    userReferrerId: { [sequelize_1.Op.eq]: `${req.query.userReferrerId}` }
+                }),
+                ...(req.query.userKabupaten && {
+                    userKabupaten: { [sequelize_1.Op.eq]: req.query.userKabupaten }
+                }),
+                ...(req.query.userKecamatan && {
+                    userKecamatan: { [sequelize_1.Op.eq]: req.query.userKecamatan }
                 }),
                 ...(req.query.search && {
                     [sequelize_1.Op.or]: [
@@ -26,12 +36,6 @@ const findAllUsers = async (req, res) => {
                         { userPosition: { [sequelize_1.Op.like]: `%${req.query.search}%` } },
                         { userReferrerPosition: { [sequelize_1.Op.like]: `%${req.query.search}%` } }
                     ]
-                }),
-                ...(req.query.userKabupaten && {
-                    userKabupaten: { [sequelize_1.Op.eq]: req.query.userKabupaten }
-                }),
-                ...(req.query.userKecamatan && {
-                    userKecamatan: { [sequelize_1.Op.eq]: req.query.userKecamatan }
                 })
             },
             order: [['id', 'desc']],
@@ -40,6 +44,7 @@ const findAllUsers = async (req, res) => {
                 offset: page.offset
             })
         });
+        console.log(result);
         const response = response_1.ResponseData.default;
         response.data = page.data(result);
         return res.status(http_status_codes_1.StatusCodes.OK).json(response);
@@ -51,7 +56,7 @@ const findAllUsers = async (req, res) => {
         return res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json(response);
     }
 };
-exports.findAllUsers = findAllUsers;
+exports.findUserReferral = findUserReferral;
 const findOneUser = async (req, res) => {
     const emptyField = (0, requestChecker_1.requestChecker)({
         requireList: ['userId'],

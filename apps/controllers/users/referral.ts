@@ -6,14 +6,24 @@ import { Pagination } from '../../utilities/pagination'
 import { requestChecker } from '../../utilities/requestChecker'
 import { UsersModel } from '../../models/users'
 
-export const findAllUsers = async (req: any, res: Response) => {
+export const findUserReferral = async (req: any, res: Response) => {
+  console.log(req.query)
   try {
     const page = new Pagination(+req.query.page || 0, +req.query.size || 10)
     const result = await UsersModel.findAndCountAll({
       where: {
         deleted: { [Op.eq]: 0 },
-        ...(req.query.searchUserReferrer && {
-          userPosition: { [Op.eq]: `${req.query.searchUserReferrer}` }
+        ...(req.query.userPosition && {
+          userPosition: { [Op.eq]: `${req.query.userPosition}` }
+        }),
+        ...(req.query.userReferrerId && {
+          userReferrerId: { [Op.eq]: `${req.query.userReferrerId}` }
+        }),
+        ...(req.query.userKabupaten && {
+          userKabupaten: { [Op.eq]: req.query.userKabupaten }
+        }),
+        ...(req.query.userKecamatan && {
+          userKecamatan: { [Op.eq]: req.query.userKecamatan }
         }),
         ...(req.query.search && {
           [Op.or]: [
@@ -25,12 +35,6 @@ export const findAllUsers = async (req: any, res: Response) => {
             { userPosition: { [Op.like]: `%${req.query.search}%` } },
             { userReferrerPosition: { [Op.like]: `%${req.query.search}%` } }
           ]
-        }),
-        ...(req.query.userKabupaten && {
-          userKabupaten: { [Op.eq]: req.query.userKabupaten }
-        }),
-        ...(req.query.userKecamatan && {
-          userKecamatan: { [Op.eq]: req.query.userKecamatan }
         })
       },
 
@@ -40,6 +44,8 @@ export const findAllUsers = async (req: any, res: Response) => {
         offset: page.offset
       })
     })
+
+    console.log(result)
 
     const response = <ResponseDataAttributes>ResponseData.default
     response.data = page.data(result)
