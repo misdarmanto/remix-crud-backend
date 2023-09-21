@@ -9,8 +9,8 @@ const requestChecker_1 = require("../../utilities/requestChecker");
 const updateUser = async (req, res) => {
     const requestBody = req.body;
     const emptyField = (0, requestChecker_1.requestChecker)({
-        requireList: ["userId"],
-        requestData: requestBody,
+        requireList: ['userId'],
+        requestData: requestBody
     });
     if (emptyField) {
         const message = `invalid request parameter! require (${emptyField})`;
@@ -20,47 +20,53 @@ const updateUser = async (req, res) => {
     try {
         const newData = {
             ...(requestBody.userName && {
-                userName: requestBody.userName,
+                userName: requestBody.userName
             }),
             ...(requestBody.userDetailAddress && {
-                userDetailAddress: requestBody.userDetailAddress,
+                userDetailAddress: requestBody.userDetailAddress
             }),
             ...(requestBody.userDesa && {
-                userDesa: requestBody.userDesa,
+                userDesa: requestBody.userDesa
             }),
             ...(requestBody.userDesaId && {
-                userDesaId: requestBody.userDesaId,
+                userDesaId: requestBody.userDesaId
             }),
             ...(requestBody.userKecamatan && {
-                userKecamatan: requestBody.userKecamatan,
+                userKecamatan: requestBody.userKecamatan
             }),
             ...(requestBody.userKecamatanId && {
-                userKecamatanId: requestBody.userKecamatanId,
+                userKecamatanId: requestBody.userKecamatanId
             }),
             ...(requestBody.userKabupaten && {
-                userKabupaten: requestBody.userKabupaten,
+                userKabupaten: requestBody.userKabupaten
             }),
             ...(requestBody.userKabupatenId && {
-                userKabupatenId: requestBody.userKabupatenId,
+                userKabupatenId: requestBody.userKabupatenId
             }),
             ...(requestBody.userPhoneNumber && {
-                userPhoneNumber: requestBody.userPhoneNumber,
+                userPhoneNumber: requestBody.userPhoneNumber
             }),
-            ...(requestBody.userRelawanName && {
-                userRelawanName: requestBody.userRelawanName,
+            ...(requestBody.userPosition && {
+                userPosition: requestBody.userPosition
             }),
-            ...(requestBody.userRelawanTimName && {
-                userRelawanTimName: requestBody.userRelawanTimName,
+            ...(requestBody.userReferrerId && {
+                userReferrerId: requestBody.userReferrerId
             }),
+            ...(requestBody.userReferrerName && {
+                userReferrerName: requestBody.userReferrerName
+            }),
+            ...(requestBody.userReferrerPosition && {
+                userReferrerPosition: requestBody.userReferrerPosition
+            })
         };
         await users_1.UsersModel.update(newData, {
             where: {
                 deleted: { [sequelize_1.Op.eq]: 0 },
-                userId: { [sequelize_1.Op.eq]: requestBody.userId },
-            },
+                userId: { [sequelize_1.Op.eq]: requestBody.userId }
+            }
         });
         const response = response_1.ResponseData.default;
-        response.data = { message: "success" };
+        response.data = { message: 'success' };
         return res.status(http_status_codes_1.StatusCodes.OK).json(response);
     }
     catch (error) {

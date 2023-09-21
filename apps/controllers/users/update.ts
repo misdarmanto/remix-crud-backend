@@ -1,74 +1,80 @@
-import { Response } from "express";
-import { StatusCodes } from "http-status-codes";
-import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
-import { Op } from "sequelize";
-import { UsersAttributes, UsersModel } from "../../models/users";
-import { requestChecker } from "../../utilities/requestChecker";
+import { Response } from 'express'
+import { StatusCodes } from 'http-status-codes'
+import { ResponseData, ResponseDataAttributes } from '../../utilities/response'
+import { Op } from 'sequelize'
+import { UsersAttributes, UsersModel } from '../../models/users'
+import { requestChecker } from '../../utilities/requestChecker'
 
 export const updateUser = async (req: any, res: Response) => {
-	const requestBody = <UsersAttributes>req.body;
-	const emptyField = requestChecker({
-		requireList: ["userId"],
-		requestData: requestBody,
-	});
+  const requestBody = <UsersAttributes>req.body
+  const emptyField = requestChecker({
+    requireList: ['userId'],
+    requestData: requestBody
+  })
 
-	if (emptyField) {
-		const message = `invalid request parameter! require (${emptyField})`;
-		const response = <ResponseDataAttributes>ResponseData.error(message);
-		return res.status(StatusCodes.BAD_REQUEST).json(response);
-	}
+  if (emptyField) {
+    const message = `invalid request parameter! require (${emptyField})`
+    const response = <ResponseDataAttributes>ResponseData.error(message)
+    return res.status(StatusCodes.BAD_REQUEST).json(response)
+  }
 
-	try {
-		const newData = {
-			...(requestBody.userName && {
-				userName: requestBody.userName,
-			}),
-			...(requestBody.userDetailAddress && {
-				userDetailAddress: requestBody.userDetailAddress,
-			}),
-			...(requestBody.userDesa && {
-				userDesa: requestBody.userDesa,
-			}),
-			...(requestBody.userDesaId && {
-				userDesaId: requestBody.userDesaId,
-			}),
-			...(requestBody.userKecamatan && {
-				userKecamatan: requestBody.userKecamatan,
-			}),
-			...(requestBody.userKecamatanId && {
-				userKecamatanId: requestBody.userKecamatanId,
-			}),
-			...(requestBody.userKabupaten && {
-				userKabupaten: requestBody.userKabupaten,
-			}),
-			...(requestBody.userKabupatenId && {
-				userKabupatenId: requestBody.userKabupatenId,
-			}),
-			...(requestBody.userPhoneNumber && {
-				userPhoneNumber: requestBody.userPhoneNumber,
-			}),
-			...(requestBody.userRelawanName && {
-				userRelawanName: requestBody.userRelawanName,
-			}),
-			...(requestBody.userRelawanTimName && {
-				userRelawanTimName: requestBody.userRelawanTimName,
-			}),
-		};
+  try {
+    const newData = {
+      ...(requestBody.userName && {
+        userName: requestBody.userName
+      }),
+      ...(requestBody.userDetailAddress && {
+        userDetailAddress: requestBody.userDetailAddress
+      }),
+      ...(requestBody.userDesa && {
+        userDesa: requestBody.userDesa
+      }),
+      ...(requestBody.userDesaId && {
+        userDesaId: requestBody.userDesaId
+      }),
+      ...(requestBody.userKecamatan && {
+        userKecamatan: requestBody.userKecamatan
+      }),
+      ...(requestBody.userKecamatanId && {
+        userKecamatanId: requestBody.userKecamatanId
+      }),
+      ...(requestBody.userKabupaten && {
+        userKabupaten: requestBody.userKabupaten
+      }),
+      ...(requestBody.userKabupatenId && {
+        userKabupatenId: requestBody.userKabupatenId
+      }),
+      ...(requestBody.userPhoneNumber && {
+        userPhoneNumber: requestBody.userPhoneNumber
+      }),
+      ...(requestBody.userPosition && {
+        userPosition: requestBody.userPosition
+      }),
+      ...(requestBody.userReferrerId && {
+        userReferrerId: requestBody.userReferrerId
+      }),
+      ...(requestBody.userReferrerName && {
+        userReferrerName: requestBody.userReferrerName
+      }),
+      ...(requestBody.userReferrerPosition && {
+        userReferrerPosition: requestBody.userReferrerPosition
+      })
+    }
 
-		await UsersModel.update(newData, {
-			where: {
-				deleted: { [Op.eq]: 0 },
-				userId: { [Op.eq]: requestBody.userId },
-			},
-		});
+    await UsersModel.update(newData, {
+      where: {
+        deleted: { [Op.eq]: 0 },
+        userId: { [Op.eq]: requestBody.userId }
+      }
+    })
 
-		const response = <ResponseDataAttributes>ResponseData.default;
-		response.data = { message: "success" };
-		return res.status(StatusCodes.OK).json(response);
-	} catch (error: any) {
-		console.log(error.message);
-		const message = `unable to process request! error ${error.message}`;
-		const response = <ResponseDataAttributes>ResponseData.error(message);
-		return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(response);
-	}
-};
+    const response = <ResponseDataAttributes>ResponseData.default
+    response.data = { message: 'success' }
+    return res.status(StatusCodes.OK).json(response)
+  } catch (error: any) {
+    console.log(error.message)
+    const message = `unable to process request! error ${error.message}`
+    const response = <ResponseDataAttributes>ResponseData.error(message)
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(response)
+  }
+}
