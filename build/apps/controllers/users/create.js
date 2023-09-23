@@ -31,7 +31,6 @@ const createUser = async (req, res) => {
         return res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json(response);
     }
     try {
-        console.log(requestBody);
         await desa_1.DesaModel.update({
             isRegistered: true
         }, {

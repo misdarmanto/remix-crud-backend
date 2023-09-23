@@ -25,6 +25,9 @@ export const findUserReferral = async (req: any, res: Response) => {
         ...(req.query.userKecamatan && {
           userKecamatan: { [Op.eq]: req.query.userKecamatan }
         }),
+        ...(req.query.userDesa && {
+          userDesa: { [Op.eq]: req.query.userDesa }
+        }),
         ...(req.query.search && {
           [Op.or]: [
             { userName: { [Op.like]: `%${req.query.search}%` } },

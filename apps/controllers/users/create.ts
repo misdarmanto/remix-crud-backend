@@ -32,7 +32,6 @@ export const createUser = async (req: any, res: Response) => {
   }
 
   try {
-    console.log(requestBody)
     await DesaModel.update(
       {
         isRegistered: true

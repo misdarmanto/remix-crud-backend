@@ -26,6 +26,9 @@ const findUserReferral = async (req, res) => {
                 ...(req.query.userKecamatan && {
                     userKecamatan: { [sequelize_1.Op.eq]: req.query.userKecamatan }
                 }),
+                ...(req.query.userDesa && {
+                    userDesa: { [sequelize_1.Op.eq]: req.query.userDesa }
+                }),
                 ...(req.query.search && {
                     [sequelize_1.Op.or]: [
                         { userName: { [sequelize_1.Op.like]: `%${req.query.search}%` } },

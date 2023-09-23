@@ -23,7 +23,6 @@ export const findAllUsers = async (req: any, res: Response) => {
             { userKecamatan: { [Op.like]: `%${req.query.search}%` } },
             { userKabupaten: { [Op.like]: `%${req.query.search}%` } },
             { userPosition: { [Op.like]: `%${req.query.search}%` } }
-            // { userReferrerPosition: { [Op.like]: `%${req.query.search}%` } }
           ]
         }),
         ...(req.query.userKabupaten && {
@@ -31,6 +30,36 @@ export const findAllUsers = async (req: any, res: Response) => {
         }),
         ...(req.query.userKecamatan && {
           userKecamatan: { [Op.eq]: req.query.userKecamatan }
+        })
+      },
+
+      order: [['id', 'desc']],
+      ...(req.query.pagination == 'true' && {
+        limit: page.limit,
+        offset: page.offset
+      })
+    })
+
+    const response = <ResponseDataAttributes>ResponseData.default
+    response.data = page.data(result)
+    return res.status(StatusCodes.OK).json(response)
+  } catch (error: any) {
+    console.log(error.message)
+    const message = `unable to process request! error ${error.message}`
+    const response = <ResponseDataAttributes>ResponseData.error(message)
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(response)
+  }
+}
+
+export const findAllUserByPosition = async (req: any, res: Response) => {
+  try {
+    const page = new Pagination(+req.query.page || 0, +req.query.size || 10)
+    const result = await UsersModel.findAndCountAll({
+      where: {
+        deleted: { [Op.eq]: 0 },
+        userPosition: { [Op.eq]: `${req.query.userPosition}` },
+        ...(req.query.search && {
+          [Op.or]: [{ userName: { [Op.like]: `%${req.query.search}%` } }]
         })
       },
 

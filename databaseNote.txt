@@ -2,3 +2,6 @@
     userReferralId: string
     userReferralPosition: 'korwil' | 'korcam' | 'kordes' | 'kortps' | 'pemilih'
     userPosition: 'korwil' | 'korcam' | 'kordes' | 'kortps' | 'pemilih'
+
+
+    dibuang sorting lengkat dampai desa
