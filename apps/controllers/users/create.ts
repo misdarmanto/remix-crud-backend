@@ -32,6 +32,19 @@ export const createUser = async (req: any, res: Response) => {
   }
 
   try {
+    const user = await UsersModel.findOne({
+      where: {
+        deleted: { [Op.eq]: 0 },
+        userPhoneNumber: { [Op.eq]: requestBody.userPhoneNumber }
+      }
+    })
+
+    if (user) {
+      const message = `nomor WA sudah terdaftar`
+      const response = <ResponseDataAttributes>ResponseData.error(message)
+      return res.status(StatusCodes.NOT_FOUND).json(response)
+    }
+
     await DesaModel.update(
       {
         isRegistered: true

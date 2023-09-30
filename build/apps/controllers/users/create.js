@@ -31,6 +31,17 @@ const createUser = async (req, res) => {
         return res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json(response);
     }
     try {
+        const user = await users_1.UsersModel.findOne({
+            where: {
+                deleted: { [sequelize_1.Op.eq]: 0 },
+                userPhoneNumber: { [sequelize_1.Op.eq]: requestBody.userPhoneNumber }
+            }
+        });
+        if (user) {
+            const message = `nomor WA sudah terdaftar`;
+            const response = response_1.ResponseData.error(message);
+            return res.status(http_status_codes_1.StatusCodes.NOT_FOUND).json(response);
+        }
         await desa_1.DesaModel.update({
             isRegistered: true
         }, {

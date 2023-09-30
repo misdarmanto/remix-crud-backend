@@ -17,25 +17,46 @@ const findUnRegisteredRegion = async (req, res) => {
                 deleted: { [sequelize_1.Op.eq]: 0 },
                 isRegistered: { [sequelize_1.Op.not]: true },
                 ...(req.query.search && {
-                    [sequelize_1.Op.or]: [{ desaName: { [sequelize_1.Op.like]: `%${req.query.search}%` } }],
+                    [sequelize_1.Op.or]: [{ desaName: { [sequelize_1.Op.like]: `%${req.query.search}%` } }]
                 }),
+                ...(req.query.desaName && {
+                    desaName: { [sequelize_1.Op.eq]: req.query.desaName }
+                })
             },
-            attributes: ["desaName"],
+            attributes: ['desaName'],
             include: [
                 {
                     model: kecamatan_1.KecamatanModel,
-                    attributes: ["kecamatanName"],
+                    attributes: ['kecamatanName'],
+                    where: {
+                        deleted: { [sequelize_1.Op.eq]: 0 },
+                        ...(req.query.kecamatanName && {
+                            kecamatanName: { [sequelize_1.Op.eq]: req.query.kecamatanName }
+                        }),
+                        ...(req.query.search && {
+                            [sequelize_1.Op.or]: [{ kecamatanName: { [sequelize_1.Op.like]: `%${req.query.search}%` } }]
+                        })
+                    }
                 },
                 {
                     model: kabupaten_1.KabupatenModel,
-                    attributes: ["kabupatenName"],
-                },
+                    attributes: ['kabupatenName'],
+                    where: {
+                        deleted: { [sequelize_1.Op.eq]: 0 },
+                        ...(req.query.kabupatenName && {
+                            kabupatenName: { [sequelize_1.Op.eq]: req.query.kabupatenName }
+                        }),
+                        ...(req.query.search && {
+                            [sequelize_1.Op.or]: [{ kabupatenName: { [sequelize_1.Op.like]: `%${req.query.search}%` } }]
+                        })
+                    }
+                }
             ],
-            order: [["id", "desc"]],
-            ...(req.query.pagination == "true" && {
+            order: [['id', 'desc']],
+            ...(req.query.pagination == 'true' && {
                 limit: page.limit,
-                offset: page.offset,
-            }),
+                offset: page.offset
+            })
         });
         const response = response_1.ResponseData.default;
         response.data = page.data(result);
@@ -53,8 +74,8 @@ const allRelawanTim = async (req, res) => {
     try {
         const relawanTim = await relawanTim_1.RelawanTimModel.findAll({
             where: {
-                deleted: { [sequelize_1.Op.eq]: 0 },
-            },
+                deleted: { [sequelize_1.Op.eq]: 0 }
+            }
         });
         if (!relawanTim) {
             const message = `relawan tim not found!`;
