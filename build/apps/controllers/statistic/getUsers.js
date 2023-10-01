@@ -9,8 +9,8 @@ const requestChecker_1 = require("../../utilities/requestChecker");
 const pagination_1 = require("../../utilities/pagination");
 const getUsersStatistic = async (req, res) => {
     const emptyField = (0, requestChecker_1.requestChecker)({
-        requireList: ["desaId"],
-        requestData: req.query,
+        requireList: ['desaId'],
+        requestData: req.query
     });
     if (emptyField) {
         const message = `invalid request parameter! require (${emptyField})`;
@@ -27,28 +27,31 @@ const getUsersStatistic = async (req, res) => {
                 ...(req.query.search && {
                     [sequelize_1.Op.or]: [
                         { userName: { [sequelize_1.Op.like]: `%${req.query.search}%` } },
-                        { userPhoneNumber: { [sequelize_1.Op.like]: `%${req.query.search}%` } },
-                    ],
-                }),
+                        { userPhoneNumber: { [sequelize_1.Op.like]: `%${req.query.search}%` } }
+                    ]
+                })
             },
             attributes: [
-                "userId",
-                "userName",
-                "userDetailAddress",
-                "userDesa",
-                "userDesaId",
-                "userKecamatan",
-                "userKecamatanId",
-                "userKabupaten",
-                "userKabupatenId",
-                "userPhoneNumber",
-                "createdOn",
+                'userId',
+                'userName',
+                'userDetailAddress',
+                'userDesa',
+                'userDesaId',
+                'userKecamatan',
+                'userKecamatanId',
+                'userKabupaten',
+                'userKabupatenId',
+                'userPhoneNumber',
+                'userPosition',
+                'userReferrerName',
+                'userReferrerPosition',
+                'createdOn'
             ],
-            order: [["id", "desc"]],
-            ...(req.query.pagination == "true" && {
+            order: [['id', 'desc']],
+            ...(req.query.pagination == 'true' && {
                 limit: page.limit,
-                offset: page.offset,
-            }),
+                offset: page.offset
+            })
         });
         const response = response_1.ResponseData.default;
         response.data = page.data(result);
