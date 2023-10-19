@@ -30,6 +30,9 @@ export const findAllUsers = async (req: any, res: Response) => {
         }),
         ...(req.query.userKecamatan && {
           userKecamatan: { [Op.eq]: req.query.userKecamatan }
+        }),
+        ...(req.query.userPosition && {
+          userPosition: { [Op.eq]: req.query.userPosition }
         })
       },
 
