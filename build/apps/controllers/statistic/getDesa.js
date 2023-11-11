@@ -8,8 +8,8 @@ const users_1 = require("../../models/users");
 const requestChecker_1 = require("../../utilities/requestChecker");
 const getDesaStatistic = async (req, res) => {
     const emptyField = (0, requestChecker_1.requestChecker)({
-        requireList: ["kabupatenId", "kecamatanId"],
-        requestData: req.query,
+        requireList: ['kabupatenId', 'kecamatanId'],
+        requestData: req.query
     });
     if (emptyField) {
         const message = `invalid request parameter! require (${emptyField})`;
@@ -19,7 +19,7 @@ const getDesaStatistic = async (req, res) => {
     try {
         const listOfDesaRegistered = await getDesaRegistered({
             kabupatenId: req.query.kabupatenId,
-            kecamatanId: req.query.kecamatanId,
+            kecamatanId: req.query.kecamatanId
         });
         const response = response_1.ResponseData.default;
         response.data = listOfDesaRegistered;
@@ -39,8 +39,8 @@ const getDesaRegistered = async ({ kecamatanId, kabupatenId }) => {
         where: {
             deleted: { [sequelize_1.Op.eq]: 0 },
             userKecamatanId: { [sequelize_1.Op.eq]: kecamatanId },
-            userKabupatenId: { [sequelize_1.Op.eq]: kabupatenId },
-        },
+            userKabupatenId: { [sequelize_1.Op.eq]: kabupatenId }
+        }
     });
     const uniqueDesaId = [...new Set(findUsers.map((item) => item.userDesaId))];
     for (let i = 0; uniqueDesaId.length > i; i++) {
@@ -49,16 +49,16 @@ const getDesaRegistered = async ({ kecamatanId, kabupatenId }) => {
                 deleted: { [sequelize_1.Op.eq]: 0 },
                 userDesaId: { [sequelize_1.Op.eq]: uniqueDesaId[i] },
                 userKecamatanId: { [sequelize_1.Op.eq]: kecamatanId },
-                userKabupatenId: { [sequelize_1.Op.eq]: kabupatenId },
-            },
+                userKabupatenId: { [sequelize_1.Op.eq]: kabupatenId }
+            }
         });
         const findUserWithDesaId = findUsers.find((item) => item.userDesaId === uniqueDesaId[i]);
         result.push({
             desa: findUserWithDesaId?.userDesa,
             desaId: findUserWithDesaId?.userDesaId,
-            kecamatanId: findUserWithDesaId?.userKabupatenId,
+            kecamatanId: findUserWithDesaId?.userKecamatanId,
             kabupatenId: findUserWithDesaId?.userKabupatenId,
-            totalUser: totalDesa,
+            totalUser: totalDesa
         });
     }
     return { total: result, users: findUsers };

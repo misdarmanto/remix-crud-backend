@@ -34,6 +34,9 @@ export const downloadUser = async (req: any, res: Response) => {
         }),
         ...(req.query.userPosition && {
           userPosition: { [Op.eq]: req.query.userPosition }
+        }),
+        ...(req.query.userName && {
+          userName: { [Op.eq]: req.query.userName }
         })
       },
       order: [['id', 'desc']]

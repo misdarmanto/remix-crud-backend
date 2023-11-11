@@ -24,6 +24,8 @@ const getUsersStatistic = async (req, res) => {
             where: {
                 deleted: { [sequelize_1.Op.eq]: 0 },
                 userDesaId: req.query.desaId,
+                userKecamatanId: req.query.kecamatanId,
+                userKabupatenId: req.query.kabupatenId,
                 ...(req.query.search && {
                     [sequelize_1.Op.or]: [
                         { userName: { [sequelize_1.Op.like]: `%${req.query.search}%` } },

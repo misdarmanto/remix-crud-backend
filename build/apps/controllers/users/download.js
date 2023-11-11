@@ -34,6 +34,9 @@ const downloadUser = async (req, res) => {
                 }),
                 ...(req.query.userPosition && {
                     userPosition: { [sequelize_1.Op.eq]: req.query.userPosition }
+                }),
+                ...(req.query.userName && {
+                    userName: { [sequelize_1.Op.eq]: req.query.userName }
                 })
             },
             order: [['id', 'desc']]

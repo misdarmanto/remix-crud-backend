@@ -26,6 +26,8 @@ export const getUsersStatistic = async (req: any, res: Response) => {
       where: {
         deleted: { [Op.eq]: 0 },
         userDesaId: req.query.desaId,
+        userKecamatanId: req.query.kecamatanId,
+        userKabupatenId: req.query.kabupatenId,
         ...(req.query.search && {
           [Op.or]: [
             { userName: { [Op.like]: `%${req.query.search}%` } },
