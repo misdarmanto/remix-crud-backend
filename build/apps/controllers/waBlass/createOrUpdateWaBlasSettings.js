@@ -10,8 +10,8 @@ const waBlasSettings_1 = require("../../models/waBlasSettings");
 const createOrUpdateWaBlassSettings = async (req, res) => {
     const requestBody = req.body;
     const emptyField = (0, requestChecker_1.requestChecker)({
-        requireList: ["waBlasSettingsMessage"],
-        requestData: requestBody,
+        requireList: ['waBlasSettingsMessage'],
+        requestData: requestBody
     });
     if (emptyField) {
         const message = `mohon lengkapi data berikut(${emptyField})`;
@@ -21,12 +21,12 @@ const createOrUpdateWaBlassSettings = async (req, res) => {
     try {
         const checkWaBlassSettings = await waBlasSettings_1.WaBlasSettingsModel.findOne({
             where: {
-                deleted: { [sequelize_1.Op.eq]: 0 },
-            },
+                deleted: { [sequelize_1.Op.eq]: 0 }
+            }
         });
         if (checkWaBlassSettings) {
-            checkWaBlassSettings.waBlasSettingsMessage =
-                requestBody.waBlasSettingsMessage;
+            checkWaBlassSettings.waBlasSettingsMessage = requestBody.waBlasSettingsMessage;
+            checkWaBlassSettings.waBlasSettingsImage = requestBody.waBlasSettingsImage;
             checkWaBlassSettings.save();
         }
         else {
@@ -34,7 +34,7 @@ const createOrUpdateWaBlassSettings = async (req, res) => {
             await waBlasSettings_1.WaBlasSettingsModel.create(requestBody);
         }
         const response = response_1.ResponseData.default;
-        response.data = { message: "success" };
+        response.data = { message: 'success' };
         return res.status(http_status_codes_1.StatusCodes.CREATED).json(response);
     }
     catch (error) {
