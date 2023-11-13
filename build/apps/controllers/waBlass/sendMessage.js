@@ -20,17 +20,17 @@ const waBlasSendMessage = async (req, res) => {
             where: {
                 deleted: { [sequelize_1.Op.eq]: 0 },
                 ...(req.body.kabupatenNameSelected && {
-                    userKabupaten: { [sequelize_1.Op.eq]: req.body.kabupatenNameSelected },
+                    userKabupaten: { [sequelize_1.Op.eq]: req.body.kabupatenNameSelected }
                 }),
                 ...(req.body.kecamaanNameSelected && {
-                    userKecamatan: { [sequelize_1.Op.eq]: req.body.kecamaanNameSelected },
-                }),
-            },
+                    userKecamatan: { [sequelize_1.Op.eq]: req.body.kecamaanNameSelected }
+                })
+            }
         });
         const waBlasSettings = await waBlasSettings_1.WaBlasSettingsModel.findOne({
             where: {
-                deleted: { [sequelize_1.Op.eq]: 0 },
-            },
+                deleted: { [sequelize_1.Op.eq]: 0 }
+            }
         });
         if (!waBlasSettings) {
             const message = `pengaturan pesan default tidak ditemukan. mohon buat pengaturan pesan default terlebih dahulu!`;
@@ -41,18 +41,19 @@ const waBlasSendMessage = async (req, res) => {
             await handleSendWhatsAppMessage({
                 whatsAppNumber: user.userPhoneNumber,
                 message: waBlasSettings?.waBlasSettingsMessage,
+                image: waBlasSettings.waBlasSettingsImage ?? null
             });
             const payload = {
                 waBlasHistoryId: (0, uuid_1.v4)(),
                 waBlasHistoryUserId: user.userId,
                 waBlasHistoryUserPhone: user.userPhoneNumber,
                 waBlasHistoryUserName: user.userName,
-                waBlasHistoryMessage: waBlasSettings.waBlasSettingsMessage,
+                waBlasHistoryMessage: waBlasSettings.waBlasSettingsMessage
             };
             await waBlasHistory_1.WaBlasHistoryModel.create(payload);
         }
         const response = response_1.ResponseData.default;
-        response.data = { message: "succsess" };
+        response.data = { message: 'succsess' };
         return res.status(http_status_codes_1.StatusCodes.OK).json(response);
     }
     catch (error) {
@@ -63,13 +64,28 @@ const waBlasSendMessage = async (req, res) => {
     }
 };
 exports.waBlasSendMessage = waBlasSendMessage;
-const handleSendWhatsAppMessage = async ({ message, whatsAppNumber, }) => {
-    const baseUrlPath = "https://pati.wablas.com/api/send-message?phone=";
+const handleSendWhatsAppMessage = async ({ message, whatsAppNumber, image }) => {
+    const baseUrlPath = `${config_1.CONFIG.waBlasBaseUrl}/send-message?phone=`;
     const apiUrl = `${baseUrlPath}${whatsAppNumber}&message=${message}&token=${config_1.CONFIG.waBlasToken}`;
     try {
-        await axios_1.default.get(apiUrl);
+        if (image) {
+            console.log('use image');
+            await axios_1.default.post(`${config_1.CONFIG.waBlasBaseUrl}/send-image`, {
+                phone: whatsAppNumber,
+                caption: message,
+                image: image
+            }, {
+                headers: {
+                    Authorization: config_1.CONFIG.waBlasToken
+                }
+            });
+        }
+        else {
+            console.log('no image');
+            await axios_1.default.get(apiUrl);
+        }
     }
     catch (error) {
-        console.log("Error:", error.message);
+        console.log('Error:', error.message);
     }
 };
