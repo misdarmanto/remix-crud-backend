@@ -1,7 +1,4 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.waBlasSendMessage = void 0;
 const http_status_codes_1 = require("http-status-codes");
@@ -11,7 +8,6 @@ const config_1 = require("../../config");
 const users_1 = require("../../models/users");
 const waBlasHistory_1 = require("../../models/waBlasHistory");
 const uuid_1 = require("uuid");
-const axios_1 = __importDefault(require("axios"));
 const waBlasSettings_1 = require("../../models/waBlasSettings");
 const waBlasSendMessage = async (req, res) => {
     console.log(req.body);
@@ -20,10 +16,10 @@ const waBlasSendMessage = async (req, res) => {
             where: {
                 deleted: { [sequelize_1.Op.eq]: 0 },
                 ...(req.body.kabupatenNameSelected && {
-                    userKabupaten: { [sequelize_1.Op.eq]: req.body.kabupatenNameSelected }
+                    userKabupatenId: { [sequelize_1.Op.eq]: req.body.kabupatenId }
                 }),
                 ...(req.body.kecamaanNameSelected && {
-                    userKecamatan: { [sequelize_1.Op.eq]: req.body.kecamaanNameSelected }
+                    userKecamatanId: { [sequelize_1.Op.eq]: req.body.kecamanId }
                 })
             }
         });
@@ -43,6 +39,9 @@ const waBlasSendMessage = async (req, res) => {
                 message: waBlasSettings?.waBlasSettingsMessage,
                 image: waBlasSettings.waBlasSettingsImage ?? null
             });
+            console.log('___________user___________');
+            console.log(user);
+            console.log('___________user___________');
             const payload = {
                 waBlasHistoryId: (0, uuid_1.v4)(),
                 waBlasHistoryUserId: user.userId,
@@ -68,22 +67,26 @@ const handleSendWhatsAppMessage = async ({ message, whatsAppNumber, image }) => 
     const baseUrlPath = `${config_1.CONFIG.waBlasBaseUrl}/send-message?phone=`;
     const apiUrl = `${baseUrlPath}${whatsAppNumber}&message=${message}&token=${config_1.CONFIG.waBlasToken}`;
     try {
-        if (image) {
-            console.log('use image');
-            await axios_1.default.post(`${config_1.CONFIG.waBlasBaseUrl}/send-image`, {
-                phone: whatsAppNumber,
-                caption: message,
-                image: image
-            }, {
-                headers: {
-                    Authorization: config_1.CONFIG.waBlasToken
-                }
-            });
-        }
-        else {
-            console.log('no image');
-            await axios_1.default.get(apiUrl);
-        }
+        console.log(message);
+        // if (image) {
+        //   console.log('use image')
+        //   await axios.post(
+        //     `${CONFIG.waBlasBaseUrl}/send-image`,
+        //     {
+        //       phone: whatsAppNumber,
+        //       caption: message,
+        //       image: image
+        //     },
+        //     {
+        //       headers: {
+        //         Authorization: CONFIG.waBlasToken
+        //       }
+        //     }
+        //   )
+        // } else {
+        //   console.log('no image')
+        //   await axios.get(apiUrl)
+        // }
     }
     catch (error) {
         console.log('Error:', error.message);

@@ -16,10 +16,10 @@ export const waBlasSendMessage = async (req: any, res: Response) => {
       where: {
         deleted: { [Op.eq]: 0 },
         ...(req.body.kabupatenNameSelected && {
-          userKabupaten: { [Op.eq]: req.body.kabupatenNameSelected }
+          userKabupatenId: { [Op.eq]: req.body.kabupatenId }
         }),
         ...(req.body.kecamaanNameSelected && {
-          userKecamatan: { [Op.eq]: req.body.kecamaanNameSelected }
+          userKecamatanId: { [Op.eq]: req.body.kecamanId }
         })
       }
     })
@@ -42,6 +42,10 @@ export const waBlasSendMessage = async (req: any, res: Response) => {
         message: waBlasSettings?.waBlasSettingsMessage,
         image: waBlasSettings.waBlasSettingsImage ?? null
       })
+
+      console.log('___________user___________')
+      console.log(user)
+      console.log('___________user___________')
 
       const payload = <WaBlasHistoryAttributes>{
         waBlasHistoryId: uuidv4(),
@@ -79,25 +83,26 @@ const handleSendWhatsAppMessage = async ({
   const baseUrlPath = `${CONFIG.waBlasBaseUrl}/send-message?phone=`
   const apiUrl = `${baseUrlPath}${whatsAppNumber}&message=${message}&token=${CONFIG.waBlasToken}`
   try {
-    if (image) {
-      console.log('use image')
-      await axios.post(
-        `${CONFIG.waBlasBaseUrl}/send-image`,
-        {
-          phone: whatsAppNumber,
-          caption: message,
-          image: image
-        },
-        {
-          headers: {
-            Authorization: CONFIG.waBlasToken
-          }
-        }
-      )
-    } else {
-      console.log('no image')
-      await axios.get(apiUrl)
-    }
+    console.log(message)
+    // if (image) {
+    //   console.log('use image')
+    //   await axios.post(
+    //     `${CONFIG.waBlasBaseUrl}/send-image`,
+    //     {
+    //       phone: whatsAppNumber,
+    //       caption: message,
+    //       image: image
+    //     },
+    //     {
+    //       headers: {
+    //         Authorization: CONFIG.waBlasToken
+    //       }
+    //     }
+    //   )
+    // } else {
+    //   console.log('no image')
+    //   await axios.get(apiUrl)
+    // }
   } catch (error: any) {
     console.log('Error:', error.message)
   }
