@@ -31,6 +31,12 @@ export const findAllUsers = async (req: any, res: Response) => {
         ...(req.query.userKecamatan && {
           userKecamatan: { [Op.eq]: req.query.userKecamatan }
         }),
+        ...(req.query.kabupatenId && {
+          userKabupatenId: { [Op.eq]: req.query.kabupatenId }
+        }),
+        ...(req.query.kecamatanId && {
+          userKecamatanId: { [Op.eq]: req.query.kecamatanId }
+        }),
         ...(req.query.userPosition && {
           userPosition: { [Op.eq]: req.query.userPosition }
         })

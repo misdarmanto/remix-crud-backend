@@ -44,7 +44,7 @@ export const waBlasSendMessage = async (req: any, res: Response) => {
       })
 
       console.log('___________user___________')
-      console.log(user)
+      console.log(user.id)
       console.log('___________user___________')
 
       const payload = <WaBlasHistoryAttributes>{

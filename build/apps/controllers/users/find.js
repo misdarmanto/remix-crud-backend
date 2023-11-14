@@ -32,6 +32,12 @@ const findAllUsers = async (req, res) => {
                 ...(req.query.userKecamatan && {
                     userKecamatan: { [sequelize_1.Op.eq]: req.query.userKecamatan }
                 }),
+                ...(req.query.kabupatenId && {
+                    userKabupatenId: { [sequelize_1.Op.eq]: req.query.kabupatenId }
+                }),
+                ...(req.query.kecamatanId && {
+                    userKecamatanId: { [sequelize_1.Op.eq]: req.query.kecamatanId }
+                }),
                 ...(req.query.userPosition && {
                     userPosition: { [sequelize_1.Op.eq]: req.query.userPosition }
                 })

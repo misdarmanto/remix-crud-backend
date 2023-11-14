@@ -40,7 +40,7 @@ const waBlasSendMessage = async (req, res) => {
                 image: waBlasSettings.waBlasSettingsImage ?? null
             });
             console.log('___________user___________');
-            console.log(user);
+            console.log(user.id);
             console.log('___________user___________');
             const payload = {
                 waBlasHistoryId: (0, uuid_1.v4)(),
