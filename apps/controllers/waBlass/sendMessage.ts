@@ -10,20 +10,8 @@ import axios from 'axios'
 import { WaBlasSettingsModel } from '../../models/waBlasSettings'
 
 export const waBlasSendMessage = async (req: any, res: Response) => {
-  console.log(req.body)
+  console.log(JSON.parse(req.body.userData))
   try {
-    const users = await UsersModel.findAll({
-      where: {
-        deleted: { [Op.eq]: 0 },
-        ...(req.body.kabupatenNameSelected && {
-          userKabupatenId: { [Op.eq]: req.body.kabupatenId }
-        }),
-        ...(req.body.kecamaanNameSelected && {
-          userKecamatanId: { [Op.eq]: req.body.kecamanId }
-        })
-      }
-    })
-
     const waBlasSettings = await WaBlasSettingsModel.findOne({
       where: {
         deleted: { [Op.eq]: 0 }
@@ -36,16 +24,15 @@ export const waBlasSendMessage = async (req: any, res: Response) => {
       return res.status(StatusCodes.NOT_FOUND).json(response)
     }
 
+    console.log('################______start______###########')
+    const users = JSON.parse(req.body.userData)
+    console.log(users.length)
     for (let user of users) {
       await handleSendWhatsAppMessage({
         whatsAppNumber: user.userPhoneNumber,
         message: waBlasSettings?.waBlasSettingsMessage,
         image: waBlasSettings.waBlasSettingsImage ?? null
       })
-
-      console.log('___________user___________')
-      console.log(user.id)
-      console.log('___________user___________')
 
       const payload = <WaBlasHistoryAttributes>{
         waBlasHistoryId: uuidv4(),
@@ -57,6 +44,8 @@ export const waBlasSendMessage = async (req: any, res: Response) => {
 
       await WaBlasHistoryModel.create(payload)
     }
+
+    console.log('################______finish______###########')
 
     const response = <ResponseDataAttributes>ResponseData.default
     response.data = { message: 'succsess' }
@@ -83,26 +72,25 @@ const handleSendWhatsAppMessage = async ({
   const baseUrlPath = `${CONFIG.waBlasBaseUrl}/send-message?phone=`
   const apiUrl = `${baseUrlPath}${whatsAppNumber}&message=${message}&token=${CONFIG.waBlasToken}`
   try {
-    console.log(message)
-    // if (image) {
-    //   console.log('use image')
-    //   await axios.post(
-    //     `${CONFIG.waBlasBaseUrl}/send-image`,
-    //     {
-    //       phone: whatsAppNumber,
-    //       caption: message,
-    //       image: image
-    //     },
-    //     {
-    //       headers: {
-    //         Authorization: CONFIG.waBlasToken
-    //       }
-    //     }
-    //   )
-    // } else {
-    //   console.log('no image')
-    //   await axios.get(apiUrl)
-    // }
+    if (image) {
+      console.log('use image')
+      // await axios.post(
+      //   `${CONFIG.waBlasBaseUrl}/send-image`,
+      //   {
+      //     phone: whatsAppNumber,
+      //     caption: message,
+      //     image: image
+      //   },
+      //   {
+      //     headers: {
+      //       Authorization: CONFIG.waBlasToken
+      //     }
+      //   }
+      // )
+    } else {
+      console.log('no image')
+      // await axios.get(apiUrl)
+    }
   } catch (error: any) {
     console.log('Error:', error.message)
   }
