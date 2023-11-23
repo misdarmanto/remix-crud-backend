@@ -12,8 +12,8 @@ const requestChecker_1 = require("../../utilities/requestChecker");
 const loginAdmin = async (req, res) => {
     const requestBody = req.body;
     const emptyField = (0, requestChecker_1.requestChecker)({
-        requireList: ["adminEmail", "adminPassword"],
-        requestData: requestBody,
+        requireList: ['adminEmail', 'adminPassword'],
+        requestData: requestBody
     });
     if (emptyField) {
         const message = `invalid request parameter! require (${emptyField})`;
@@ -25,20 +25,18 @@ const loginAdmin = async (req, res) => {
             raw: true,
             where: {
                 deleted: { [sequelize_1.Op.eq]: 0 },
-                adminEmail: { [sequelize_1.Op.eq]: requestBody.adminEmail },
-            },
+                adminEmail: { [sequelize_1.Op.eq]: requestBody.adminEmail }
+            }
         });
         if (!checkAdmin) {
             const message = `User belum terdaftar.`;
             const response = response_1.ResponseData.error(message);
             return res.status(http_status_codes_1.StatusCodes.UNAUTHORIZED).json(response);
         }
-        const hashPassword = require("crypto")
-            .createHash("sha1")
+        const hashPassword = require('crypto')
+            .createHash('sha1')
             .update(requestBody.adminPassword + config_1.CONFIG.secret.password_encryption)
-            .digest("hex");
-        console.log("hash");
-        console.log(hashPassword);
+            .digest('hex');
         if (hashPassword !== checkAdmin.adminPassword) {
             const message = `Kombinasi email dan password tidak dikenal`;
             const response = response_1.ResponseData.error(message);
@@ -50,15 +48,15 @@ const loginAdmin = async (req, res) => {
             raw: true,
             where: {
                 sessionId: { [sequelize_1.Op.eq]: checkAdmin?.adminId },
-                deleted: { [sequelize_1.Op.eq]: 0 },
-            },
+                deleted: { [sequelize_1.Op.eq]: 0 }
+            }
         });
         const sessionData = {
             sessionId: (0, uuid_1.v4)(),
             sessionAdminId: checkAdmin?.adminId,
             session: (0, uuid_1.v4)(),
             sessionExpiredOn: expired.getTime(),
-            deleted: 0,
+            deleted: 0
         };
         if (!checkSession) {
             await sessions_1.SessionModel.create(sessionData);
@@ -67,8 +65,8 @@ const loginAdmin = async (req, res) => {
             await sessions_1.SessionModel.update(sessionData, {
                 where: {
                     sessionId: { [sequelize_1.Op.eq]: checkAdmin?.adminId },
-                    deleted: { [sequelize_1.Op.eq]: 0 },
-                },
+                    deleted: { [sequelize_1.Op.eq]: 0 }
+                }
             });
         }
         const responseData = {
@@ -77,7 +75,7 @@ const loginAdmin = async (req, res) => {
             adminEmail: checkAdmin?.adminEmail,
             adminRole: checkAdmin.adminRole,
             session: sessionData.session,
-            sessionExpiredOn: sessionData.sessionExpiredOn,
+            sessionExpiredOn: sessionData.sessionExpiredOn
         };
         const response = response_1.ResponseData.default;
         response.data = responseData;
