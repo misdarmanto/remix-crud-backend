@@ -9,7 +9,7 @@ const requestChecker_1 = require("../../utilities/requestChecker");
 const users_1 = require("../../models/users");
 const findAllUsers = async (req, res) => {
     try {
-        const page = new pagination_1.Pagination(+req.query.page || 0, +req.query.size || 10);
+        const page = new pagination_1.Pagination(+req.query.page || 0, +req.query.size || 100);
         const result = await users_1.UsersModel.findAndCountAll({
             where: {
                 deleted: { [sequelize_1.Op.eq]: 0 },

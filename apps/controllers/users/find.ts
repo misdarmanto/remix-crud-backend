@@ -8,7 +8,7 @@ import { UsersModel } from '../../models/users'
 
 export const findAllUsers = async (req: any, res: Response) => {
   try {
-    const page = new Pagination(+req.query.page || 0, +req.query.size || 10)
+    const page = new Pagination(+req.query.page || 0, +req.query.size || 100)
     const result = await UsersModel.findAndCountAll({
       where: {
         deleted: { [Op.eq]: 0 },
