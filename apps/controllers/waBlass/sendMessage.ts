@@ -25,21 +25,25 @@ export const waBlasSendMessage = async (req: any, res: Response) => {
     const users = JSON.parse(req.body.userData ?? '')
 
     for (let user of users) {
-      await handleSendWhatsAppMessage({
-        whatsAppNumber: user.userPhoneNumber,
-        message: waBlasSettings?.waBlasSettingsMessage,
-        image: waBlasSettings.waBlasSettingsImage ?? null
-      })
+      if (user.userPhoneNumber !== null) {
+        if (user.userPhoneNumber.length > 7) {
+          await handleSendWhatsAppMessage({
+            whatsAppNumber: user.userPhoneNumber,
+            message: waBlasSettings?.waBlasSettingsMessage,
+            image: waBlasSettings.waBlasSettingsImage ?? null
+          })
 
-      const payload = <WaBlasHistoryAttributes>{
-        waBlasHistoryId: uuidv4(),
-        waBlasHistoryUserId: user.userId,
-        waBlasHistoryUserPhone: user.userPhoneNumber,
-        waBlasHistoryUserName: user.userName,
-        waBlasHistoryMessage: waBlasSettings.waBlasSettingsMessage
+          const payload = <WaBlasHistoryAttributes>{
+            waBlasHistoryId: uuidv4(),
+            waBlasHistoryUserId: user.userId,
+            waBlasHistoryUserPhone: user.userPhoneNumber,
+            waBlasHistoryUserName: user.userName,
+            waBlasHistoryMessage: waBlasSettings.waBlasSettingsMessage
+          }
+
+          await WaBlasHistoryModel.create(payload)
+        }
       }
-
-      await WaBlasHistoryModel.create(payload)
     }
 
     const response = <ResponseDataAttributes>ResponseData.default
@@ -70,7 +74,7 @@ const handleSendWhatsAppMessage = async ({
     if (image) {
       console.log('use image')
       await axios.post(
-        `${CONFIG.waBlasBaseUrl}/send-image`,
+        `${CONFIG.waBlasBaseUrl}/api/send-image`,
         {
           phone: whatsAppNumber,
           caption: message,
